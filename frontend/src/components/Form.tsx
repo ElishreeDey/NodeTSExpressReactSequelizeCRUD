@@ -7,19 +7,12 @@
  ****************************************************************************************************************************
  */
 
-import React, { useState, ChangeEvent, SubmitEvent, useEffect } from 'react'
-
-// These imports are for Toastify pop-ups
-import { toast } from 'react-toastify'
+import React from 'react'
 
 //import faceIcon from images.ts file';
 import { faceIcon } from '../assets/images'
 
-import {checkNotIsEmpty,validateEmail,validateFlexiblePhone} from '../utils/validation'
-
-import { addEditDeleteMsgText } from '../utils/constants'
-
-import { saveUsersToStorage } from '../services/userService'
+import useUserForm from '../hooks/useUserForm'
 
 import type { EntryDataBase } from '../types/type'
 
@@ -42,143 +35,20 @@ export default function RenderForm({
   editUser,
   setSelectedRow,
 }: FormProps) {
-  const [formData, setFormData] = useState({
-    userName: '',
-    email: '',
-    phone: '',
-    gender: '',
-    mandatoryName: '*',
-    mandatoryEmail: '*',
-    mandatoryPhone: '*',
+
+  const {
+    formData,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+  } = useUserForm({
+    tableData,
+    setTableData,
+    editIndex,
+    setEditIndex,
+    editUser,
+    setSelectedRow,
   })
-
-  // useEffect is a React Hook. When editUser clicked , fill the form with that user's data.
-  useEffect(() => {
-    if (editUser) {
-      setFormData({
-        userName: editUser.username,
-        email: editUser.email,
-        phone: editUser.phone,
-        gender: editUser.gender,
-        mandatoryName: '*',
-        mandatoryEmail: '*',
-        mandatoryPhone: '*',
-      })
-    }
-  }, [editUser])
-
-  /* Handle Input Change */
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
-  }
-
-  /* Handle Validation on Blur */
-  const handleBlur = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-
-    // Name Validation
-    if (name === 'userName') {
-      const result = checkNotIsEmpty(value)
-      setFormData((prev) => ({
-        ...prev,
-        mandatoryName:
-          value === '' ? '*' : result.isValid ? '' : result.errorMessage,
-      }))
-    }
-
-    // Email Validation
-    if (name === 'email') {
-      const result = validateEmail(value)
-      setFormData((prev) => ({
-        ...prev,
-        mandatoryEmail:
-          value === '' ? '*' : result.isValid ? '' : result.errorMessage,
-      }))
-    }
-
-    // Phone Validation
-    if (name === 'phone') {
-      const result = validateFlexiblePhone(value)
-      setFormData((prev) => ({
-        ...prev,
-        phone: result.isValid ? result.formattedPhone : prev.phone,
-        mandatoryPhone:
-          value === '' ? '*' : result.isValid ? '' : result.errorMessage,
-      }))
-    }
-  }
-
-  /* Handle Form Submit */
-  const handleSubmit = (e: SubmitEvent) => {
-    e.preventDefault()
-
-    const userData = {
-      username: formData.userName,
-      email: formData.email,
-      phone: formData.phone,
-      gender: formData.gender,
-    }
-
-    /* Edit the existing data when user clicks the edit icon */
-    if (editIndex !== null) {
-      const updatedData = [...tableData]
-      updatedData[editIndex] = userData
-      setTableData(updatedData)
-
-      try {
-        saveUsersToStorage(updatedData)
-      } catch (error) {
-        console.error('Failed to save data:', error)
-        toast.error('Unable to save data', { position: 'top-right' })
-      }
-
-      setEditIndex(null)
-
-      // Toast Popup
-      toast.success(`${addEditDeleteMsgText.dataEditMsg}`, {
-        position: 'top-right',
-      })
-    } else {
-
-    /* Adding new data */
-      const updatedData = [userData, ...tableData]
-
-      setTableData(updatedData)
-
-      try {
-        saveUsersToStorage(updatedData)
-      } catch (error) {
-        console.error('Failed to save data:', error)
-        toast.error('Unable to save data', { position: 'top-right' })
-      }
-
-      // Toast Popup
-      toast.success(`${addEditDeleteMsgText.dataSaveMsg}`, {
-        position: 'top-right',
-      })
-
-      setEditIndex(null) // make edit index null
-      setSelectedRow(null) // clear row highlight
-    }
-
-    /* CLEAR FORM*/
-    setFormData({
-      userName: '',
-      email: '',
-      phone: '',
-      gender: '',
-      mandatoryName: '*',
-      mandatoryEmail: '*',
-      mandatoryPhone: '*',
-    })
-  }
 
   return (
     <div id="divFormComponent" className="formCard">
@@ -261,7 +131,6 @@ export default function RenderForm({
           {editIndex !== null ? 'Save Changes' : 'Submit'}
         </button>
       </form>
-
     </div>
   )
 }
