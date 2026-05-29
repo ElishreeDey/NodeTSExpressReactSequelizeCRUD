@@ -258,8 +258,7 @@ export default function RenderForm({
           {editIndex !== null ? 'Save Changes' : 'Submit'}
         </button>
       </form>
-
-      
+            
     </div>
   )
 }
