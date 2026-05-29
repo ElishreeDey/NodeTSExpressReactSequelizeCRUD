@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import RenderForm from '../components/Form'
 import RenderTable from '../components/Table'
 
-import type { EntryDataBase } from '../types/type'
+import type { EntryDataBase } from '../types'
 
 import { getUsersFromStorage,saveUsersToStorage} from '../services/userService'
 

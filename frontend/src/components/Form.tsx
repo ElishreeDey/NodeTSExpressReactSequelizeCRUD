@@ -14,7 +14,7 @@ import { faceIcon } from '../assets/images'
 
 import useUserForm from '../hooks/useUserForm'
 
-import type { EntryDataBase } from '../types/type'
+import type { EntryDataBase } from '../types'
 
 /* FormProps - what props are coming into component, what datatype each prop must have */
 type FormProps = {

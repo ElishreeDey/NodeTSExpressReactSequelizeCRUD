@@ -26,7 +26,7 @@ import { addEditDeleteMsgText } from '../utils/constants'
 
 import { saveUsersToStorage } from '../services/userService'
 
-import type { EntryDataBase } from '../types/type'
+import type { EntryDataBase } from '../types'
 
 type UseUserFormProps = {
   tableData: EntryDataBase[]

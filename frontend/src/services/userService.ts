@@ -7,7 +7,7 @@
  ****************************************************************************************************************************
  */
 
-import type { EntryDataBase } from '../types/type'
+import type { EntryDataBase } from '../types'
 
 const STORAGE_KEY = 'setLocalStorageJSON'
 
