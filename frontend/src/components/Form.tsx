@@ -10,7 +10,7 @@
 import React, { useState, ChangeEvent, SubmitEvent, useEffect } from 'react'
 
 // These imports are for Toastify pop-ups
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 //import faceIcon from images.ts file';
@@ -259,8 +259,7 @@ export default function RenderForm({
         </button>
       </form>
 
-      {/* Toastify Popup UI render else toastify pop-up will not open */}
-      <ToastContainer />
+      
     </div>
   )
 }

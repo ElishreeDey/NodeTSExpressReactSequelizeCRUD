@@ -5,6 +5,9 @@ import RenderTable from '../components/Table'
 
 import type { EntryDataBase } from '../types/type'
 
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 export default function App() {
   const [tableData, setTableData] = useState<EntryDataBase[]>([])
 
@@ -42,6 +45,12 @@ export default function App() {
   }
 
   return (
+    <>
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+    />
+
     <div className="pageContainer">
       <RenderForm
         tableData={tableData}
@@ -60,5 +69,8 @@ export default function App() {
         setSelectedRow={setSelectedRow}
       />
     </div>
+
+    </>
+    
   )
 }
