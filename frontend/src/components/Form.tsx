@@ -11,20 +11,17 @@ import React, { useState, ChangeEvent, SubmitEvent, useEffect } from 'react'
 
 // These imports are for Toastify pop-ups
 import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 
 //import faceIcon from images.ts file';
 import { faceIcon } from '../assets/images'
 
-import {
-  checkNotIsEmpty,
-  validateEmail,
-  validateFlexiblePhone,
-} from '../utils/validation'
+import {checkNotIsEmpty,validateEmail,validateFlexiblePhone} from '../utils/validation'
 
 import { addEditDeleteMsgText } from '../utils/constants'
 
-import type { EntryDataBase } from '../type'
+import { saveUsersToStorage } from '../services/userService'
+
+import type { EntryDataBase } from '../types/type'
 
 /* FormProps - what props are coming into component, what datatype each prop must have */
 type FormProps = {
@@ -69,16 +66,6 @@ export default function RenderForm({
       })
     }
   }, [editUser])
-
-  /* Save Data to LocalStorage */
-  const saveToLocalStorage = (data: EntryDataBase[]) => {
-    try {
-      localStorage.setItem('setLocalStorageJSON', JSON.stringify(data))
-    } catch (error) {
-      console.error('Failed to save data:', error)
-      toast.error('Unable to save data', { position: 'top-right' })
-    }
-  }
 
   /* Handle Input Change */
   const handleChange = (
@@ -144,8 +131,16 @@ export default function RenderForm({
       const updatedData = [...tableData]
       updatedData[editIndex] = userData
       setTableData(updatedData)
-      saveToLocalStorage(updatedData)
+
+      try {
+        saveUsersToStorage(updatedData)
+      } catch (error) {
+        console.error('Failed to save data:', error)
+        toast.error('Unable to save data', { position: 'top-right' })
+      }
+
       setEditIndex(null)
+
       // Toast Popup
       toast.success(`${addEditDeleteMsgText.dataEditMsg}`, {
         position: 'top-right',
@@ -156,11 +151,19 @@ export default function RenderForm({
       const updatedData = [userData, ...tableData]
 
       setTableData(updatedData)
-      saveToLocalStorage(updatedData)
+
+      try {
+        saveUsersToStorage(updatedData)
+      } catch (error) {
+        console.error('Failed to save data:', error)
+        toast.error('Unable to save data', { position: 'top-right' })
+      }
+
       // Toast Popup
       toast.success(`${addEditDeleteMsgText.dataSaveMsg}`, {
         position: 'top-right',
       })
+
       setEditIndex(null) // make edit index null
       setSelectedRow(null) // clear row highlight
     }
@@ -258,7 +261,7 @@ export default function RenderForm({
           {editIndex !== null ? 'Save Changes' : 'Submit'}
         </button>
       </form>
-            
+
     </div>
   )
 }
