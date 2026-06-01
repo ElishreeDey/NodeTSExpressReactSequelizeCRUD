@@ -7,14 +7,14 @@
  ****************************************************************************************************************************
  */
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 //import listIcon,editIcon,deleteIcon from images.ts file';
 import { editIcon, deleteIcon, listIcon } from '../assets/images'
 
 import ConfirmModal from './ConfirmModal/ConfirmModal'
 
-import type { EntryDataBase } from '../type'
+import type { EntryDataBase } from '../types'
 
 import { deleteConformModal } from '../utils/constants'
 
@@ -35,25 +35,50 @@ export default function RenderTable({
   selectedRow,
   setSelectedRow,
 }: TableProps) {
-  /* Modal State */
+  /* Modal Open / Close State */
   const [showModal, setShowModal] = useState(false)
 
+  /* Store which row index user wants to delete */
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null)
 
-  /* table design */
+  /* Handler to Confirm Delete when user clicks Yes in confirmation modal:
+     1. Delete selected row
+     2. Close modal
+     3. Clear delete index
+     4. Remove row highlight
+  */
+  const handleConfirmDelete = () => {
+    if (deleteIndex !== null) {
+      onDelete(deleteIndex)
+    }
+
+    setShowModal(false)
+    setDeleteIndex(null)
+    setSelectedRow(null)
+  }
+
+  /* Handler to Cancel Delete when user clicks Cancel:
+     1. Close modal
+     2. Clear delete index
+     3. Remove row highlight
+  */
+  const handleCancelDelete = () => {
+    setShowModal(false)
+    setDeleteIndex(null)
+    setSelectedRow(null)
+  }
+
+  /* ----------------- table design -------------------- */
   return (
     <div className="tableCard">
-      {/* Heading*/}
       <h1>
-        {' '}
-        <img src={listIcon} className="icon" alt="List Icon" /> Registered
-        Data{' '}
+        <img src={listIcon} className="icon" alt="List Icon" />
+        Registered Data
       </h1>
 
-      {/* Table Wrapper */}
+      {/* Table Wrapper helps manage scroll and responsive table layout*/}
       <div className="tableWrapper">
         <table id="viewData" className="displayRegisteredData">
-          {/* Table Header */}
           <thead>
             <tr>
               <th className="storedDataColHeader"> Name </th>
@@ -64,81 +89,85 @@ export default function RenderTable({
             </tr>
           </thead>
 
-          {/* Table Body */}
+          {/* Table Body - Loop through tableData and render each user row */}
           <tbody>
-            {tableData.map((user, index) => (
-              <tr key={index}>
-                <td
-                  className={`storedDataCol ${selectedRow === index ? 'highlightRow' : ''}`}
-                >
-                  {user.username}
-                </td>
-                <td
-                  className={`storedDataCol ${selectedRow === index ? 'highlightRow' : ''}`}
-                >
-                  {user.email}
-                </td>
-                <td
-                  className={`storedDataCol ${selectedRow === index ? 'highlightRow' : ''}`}
-                >
-                  {user.phone}
-                </td>
-                <td
-                  className={`storedDataCol ${selectedRow === index ? 'highlightRow' : ''}`}
-                >
-                  {user.gender}
-                </td>
-                <td
-                  className={`storedDataCol ${selectedRow === index ? 'highlightRow' : ''}`}
-                >
-                  {/* Edit Icon */}
-                  <img
-                    src={editIcon}
-                    className="editDeleteIcon"
-                    alt="Edit"
-                    onClick={() => {
-                      setSelectedRow(index)
-                      onEdit(index)
-                    }}
-                  />
+            {tableData.map((user, index) => {
+              /* Check if current row is selected, used to apply row highlight styling */
+              const isSelected = selectedRow === index
 
-                  {/* Delete Icon */}
-                  <img
-                    src={deleteIcon}
-                    className="editDeleteIcon"
-                    alt="Delete"
-                    onClick={() => {
-                      setSelectedRow(index)
-                      setDeleteIndex(index)
-                      setShowModal(true)
-                    }}
-                  />
-                </td>
-              </tr>
-            ))}
+              return (
+                <tr key={index}>
+                  <td
+                    className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
+                  >
+                    {user.username}
+                  </td>
+
+                  <td
+                    className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
+                  >
+                    {user.email}
+                  </td>
+
+                  <td
+                    className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
+                  >
+                    {user.phone}
+                  </td>
+
+                  <td
+                    className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
+                  >
+                    {user.gender}
+                  </td>
+
+                  <td
+                    className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
+                  >
+                    {/* Edit Icon
+                        1. Highlight selected row
+                        2. Open form with selected row data
+                    */}
+                    <img
+                      src={editIcon}
+                      className="editDeleteIcon"
+                      alt="Edit"
+                      onClick={() => {
+                        setSelectedRow(index)
+                        onEdit(index)
+                      }}
+                    />
+
+                    {/* Delete Icon
+                        1. Highlight selected row
+                        2. Store delete index
+                        3. Open confirmation modal
+                    */}
+                    <img
+                      src={deleteIcon}
+                      className="editDeleteIcon"
+                      alt="Delete"
+                      onClick={() => {
+                        setSelectedRow(index)
+                        setDeleteIndex(index)
+                        setShowModal(true)
+                      }}
+                    />
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>
 
-      {/* Confirmation Modal */}
+      {/* Confirmation Modal delete confirmation popup*/}
       <ConfirmModal
         isOpen={showModal}
         title={deleteConformModal.delConfTitle}
         message={deleteConformModal.delConfMsg}
-        onConfirm={() => {
-          if (deleteIndex !== null) {
-            onDelete(deleteIndex)
-          }
-
-          setShowModal(false)
-          setDeleteIndex(null)
-          setSelectedRow(null)
-        }}
-        onCancel={() => {
-          setShowModal(false)
-          setDeleteIndex(null)
-          setSelectedRow(null)
-        }}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
       />
     </div>
   )
