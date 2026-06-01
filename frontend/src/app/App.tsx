@@ -1,9 +1,8 @@
 import React from 'react'
 
-import RenderForm from '../components/Form'
-import RenderTable from '../components/Table'
+import { RenderForm, RenderTable } from '../components'
 
-import useUsers from '../hooks/useUsers'
+import { useUsers } from '../hooks'
 
 // These imports are for Toastify pop-ups
 import { ToastContainer } from 'react-toastify'

@@ -17,9 +17,9 @@ import {
   validateFlexiblePhone,
 } from '../utils/validation'
 
-import { addEditDeleteMsgText } from '../utils/constants'
+import { USER_MESSAGES } from '../constants'
 
-import { saveUsersToStorage } from '../services/userService'
+import { saveUsersToStorage } from '../services'
 
 import type { EntryDataBase } from '../types'
 
@@ -140,7 +140,7 @@ export default function useUserForm({
       setEditIndex(null)
 
       // Toast Popup
-      toast.success(`${addEditDeleteMsgText.dataEditMsg}`, {
+      toast.success(`${USER_MESSAGES.editSuccess}`, {
         position: 'top-right',
       })
     } else {
@@ -157,7 +157,7 @@ export default function useUserForm({
       }
 
       // Toast Popup
-      toast.success(`${addEditDeleteMsgText.dataSaveMsg}`, {
+      toast.success(`${USER_MESSAGES.saveSuccess}`, {
         position: 'top-right',
       })
 

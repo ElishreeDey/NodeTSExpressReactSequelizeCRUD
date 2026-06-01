@@ -11,10 +11,7 @@ import { useState, useEffect } from 'react'
 
 import type { EntryDataBase } from '../types'
 
-import {
-  getUsersFromStorage,
-  saveUsersToStorage,
-} from '../services/userService'
+import { getUsersFromStorage, saveUsersToStorage } from '../services'
 
 export default function useUsers() {
   const [tableData, setTableData] = useState<EntryDataBase[]>([])

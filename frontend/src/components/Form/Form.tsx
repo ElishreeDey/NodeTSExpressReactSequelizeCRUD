@@ -9,11 +9,11 @@
 
 import React from 'react'
 
-import { faceIcon } from '../assets'
+import { faceIcon } from '../../assets'
 
-import { useUserForm } from '../hooks'
+import { useUserForm } from '../../hooks'
 
-import type { EntryDataBase } from '../types'
+import type { EntryDataBase } from '../../types'
 
 /* FormProps - what props are coming into component, what datatype each prop must have */
 type FormProps = {

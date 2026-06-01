@@ -9,13 +9,13 @@
 
 import { useState } from 'react'
 
-import { editIcon, deleteIcon, listIcon } from '../assets'
+import { editIcon, deleteIcon, listIcon } from '../../assets'
 
-import ConfirmModal from './ConfirmModal/ConfirmModal'
+import ConfirmModal from '../ConfirmModal/ConfirmModal'
 
-import type { EntryDataBase } from '../types'
+import type { EntryDataBase } from '../../types'
 
-import { DELETE_CONFIRM_MODAL } from '../constants'
+import { DELETE_CONFIRM_MODAL } from '../../constants'
 
 /* Props Type */
 type TableProps = {

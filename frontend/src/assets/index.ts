@@ -1,7 +1,7 @@
 /*
  ****************************************************************************************************************************
- * Filename    : images
- * Description : import all images in a single file and export them to use it again
+ * Filename    : index
+ * Description : Import and export all application assets from a single file
  * Author      : Elishree Dey Chand
  * Created     : 2026-05-13
  ****************************************************************************************************************************
