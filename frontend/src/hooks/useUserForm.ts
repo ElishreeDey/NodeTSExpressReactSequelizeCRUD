@@ -7,12 +7,7 @@
  ****************************************************************************************************************************
  */
 
-import React, {
-  useState,
-  ChangeEvent,
-  SubmitEvent,
-  useEffect,
-} from 'react'
+import React, { useState, ChangeEvent, SubmitEvent, useEffect } from 'react'
 
 import { toast } from 'react-toastify'
 
@@ -149,7 +144,6 @@ export default function useUserForm({
         position: 'top-right',
       })
     } else {
-
       /* Adding new data */
       const updatedData = [userData, ...tableData]
 

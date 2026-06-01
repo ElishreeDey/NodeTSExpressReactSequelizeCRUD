@@ -35,13 +35,7 @@ export default function RenderForm({
   editUser,
   setSelectedRow,
 }: FormProps) {
-
-  const {
-    formData,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-  } = useUserForm({
+  const { formData, handleChange, handleBlur, handleSubmit } = useUserForm({
     tableData,
     setTableData,
     editIndex,

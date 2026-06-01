@@ -23,14 +23,9 @@ export const getUsersFromStorage = (): EntryDataBase[] => {
 }
 
 /* Save Users to Local Storage */
-export const saveUsersToStorage = (
-  data: EntryDataBase[]
-): void => {
+export const saveUsersToStorage = (data: EntryDataBase[]): void => {
   try {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(data)
-    )
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
   } catch (error) {
     console.error('Failed to save data:', error)
     throw error
