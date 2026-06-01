@@ -13,7 +13,7 @@ import { faceIcon } from '../../assets'
 
 import { useUserForm } from '../../hooks'
 
-import { Input, Select, Button } from '../ui'
+import { Input, Select, Button } from '../UI'
 
 import type { EntryDataBase } from '../../types'
 

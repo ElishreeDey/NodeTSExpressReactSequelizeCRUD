@@ -17,7 +17,7 @@ import {
   validateFlexiblePhone,
 } from '../utils/validation'
 
-import { USER_MESSAGES } from '../constants'
+import { USER_MESSAGES, CONSOLE_MSG, TOAST_MSG } from '../constants'
 
 import { saveUsersToStorage } from '../services'
 
@@ -133,14 +133,14 @@ export default function useUserForm({
       try {
         saveUsersToStorage(updatedData)
       } catch (error) {
-        console.error('Failed to save data:', error)
-        toast.error('Unable to save data', { position: 'top-right' })
+        console.error(CONSOLE_MSG.saveDataErr, error)
+        toast.error(TOAST_MSG.saveFail, { position: 'top-right' })
       }
 
       setEditIndex(null)
 
       // Toast Popup
-      toast.success(`${USER_MESSAGES.editSuccess}`, {
+      toast.success(USER_MESSAGES.editSuccess, {
         position: 'top-right',
       })
     } else {
@@ -152,12 +152,12 @@ export default function useUserForm({
       try {
         saveUsersToStorage(updatedData)
       } catch (error) {
-        console.error('Failed to save data:', error)
-        toast.error('Unable to save data', { position: 'top-right' })
+        console.error(CONSOLE_MSG.saveDataErr, error)
+        toast.error(TOAST_MSG.saveFail, { position: 'top-right' })
       }
 
       // Toast Popup
-      toast.success(`${USER_MESSAGES.saveSuccess}`, {
+      toast.success(USER_MESSAGES.saveSuccess, {
         position: 'top-right',
       })
 

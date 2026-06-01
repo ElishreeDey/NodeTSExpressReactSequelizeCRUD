@@ -8,12 +8,14 @@
  ***********************************************************************************************
  */
 
+ import { VALIDATION_MSG } from '../constants'
+
 //This function will check if the name is empty or not. Can be used for other fields as well if needed to check NotIsEmpty.
 export function checkNotIsEmpty(name: string) {
   if (!name || name.trim() === '') {
     return {
       isValid: false,
-      errorMessage: 'Please fill the value',
+      errorMessage: VALIDATION_MSG.requiredField,
     }
   } else {
     return {
@@ -32,7 +34,7 @@ export function validateEmail(email: string) {
     // Invalid Email
     return {
       isValid: false,
-      errorMessage: 'Invalid email address',
+      errorMessage: VALIDATION_MSG.invalidEmail,
     }
   } else {
     return {
@@ -58,7 +60,7 @@ export function validateFlexiblePhone(phone: string) {
     return {
       isValid: false,
       formattedPhone: phone,
-      errorMessage: 'Invalid phone number',
+      errorMessage: VALIDATION_MSG.invalidPhone,
     }
   }
 
