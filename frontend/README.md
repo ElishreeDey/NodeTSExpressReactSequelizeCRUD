@@ -10,6 +10,6 @@ Users can:
 - Store data in LocalStorage
 - View success notifications using Toastify
 
-
+- testing huskey and commitlint
 
 
