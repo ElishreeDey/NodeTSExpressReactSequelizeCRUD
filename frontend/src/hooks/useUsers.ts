@@ -7,46 +7,48 @@
  ****************************************************************************************************************************
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 
 import type { EntryDataBase } from '../types'
 
-import { getUsersFromStorage, saveUsersToStorage } from '../services'
+import { useLocalStorage } from '../hooks'
 
 export default function useUsers() {
-  const [tableData, setTableData] = useState<EntryDataBase[]>([])
+  /* User Data State with localStorage Hook */
+  const { storedValue: tableData, setValue: setTableData } = useLocalStorage<
+    EntryDataBase[]
+  >('setLocalStorageJSON', [])
 
-  /*Which row is currently editing.*/
+  /* Which row is currently editing */
   const [editIndex, setEditIndex] = useState<number | null>(null)
 
-  /*Take the edit row complete data.*/
+  /* Take the edit row complete data */
   const [editUser, setEditUser] = useState<EntryDataBase | null>(null)
 
   /* Row Highlight State */
   const [selectedRow, setSelectedRow] = useState<number | null>(null)
 
-  /*Load saved data from localStorage.*/
-  useEffect(() => {
-    const storedData = getUsersFromStorage()
-    setTableData(storedData)
-  }, [])
-
   /* Which row to delete */
-  const handleDelete = (index: number) => {
-    const updatedData = tableData.filter((_, i) => i !== index)
+  const handleDelete = useCallback(
+    (index: number) => {
+      const updatedData = tableData.filter((_, i) => i !== index)
 
-    setTableData(updatedData)
-    saveUsersToStorage(updatedData)
-  }
+      setTableData(updatedData)
+    },
+    [tableData, setTableData]
+  )
 
   /* Which row to edit */
-  const handleEdit = (index: number) => {
-    const selectedUser = tableData[index]
+  const handleEdit = useCallback(
+    (index: number) => {
+      const selectedUser = tableData[index]
 
-    setEditIndex(index)
-    setEditUser(selectedUser)
-    setSelectedRow(index)
-  }
+      setEditIndex(index)
+      setEditUser(selectedUser)
+      setSelectedRow(index)
+    },
+    [tableData]
+  )
 
   return {
     tableData,

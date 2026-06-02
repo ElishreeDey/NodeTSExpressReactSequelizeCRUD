@@ -17,9 +17,7 @@ import {
   validateFlexiblePhone,
 } from '../utils/validation'
 
-import { USER_MESSAGES, CONSOLE_MSG, TOAST_MSG } from '../constants'
-
-import { saveUsersToStorage } from '../services'
+import { USER_MESSAGES } from '../constants'
 
 import type { EntryDataBase } from '../types'
 
@@ -84,6 +82,7 @@ export default function useUserForm({
     // Name Validation
     if (name === 'userName') {
       const result = checkNotIsEmpty(value)
+
       setFormData((prev) => ({
         ...prev,
         mandatoryName:
@@ -94,6 +93,7 @@ export default function useUserForm({
     // Email Validation
     if (name === 'email') {
       const result = validateEmail(value)
+
       setFormData((prev) => ({
         ...prev,
         mandatoryEmail:
@@ -104,6 +104,7 @@ export default function useUserForm({
     // Phone Validation
     if (name === 'phone') {
       const result = validateFlexiblePhone(value)
+
       setFormData((prev) => ({
         ...prev,
         phone: result.isValid ? result.formattedPhone : prev.phone,
@@ -124,18 +125,13 @@ export default function useUserForm({
       gender: formData.gender,
     }
 
-    /* Edit the existing data when user clicks the edit icon */
+    /* Edit existing data */
     if (editIndex !== null) {
       const updatedData = [...tableData]
-      updatedData[editIndex] = userData
-      setTableData(updatedData)
 
-      try {
-        saveUsersToStorage(updatedData)
-      } catch (error) {
-        console.error(CONSOLE_MSG.saveDataErr, error)
-        toast.error(TOAST_MSG.saveFail, { position: 'top-right' })
-      }
+      updatedData[editIndex] = userData
+
+      setTableData(updatedData)
 
       setEditIndex(null)
 
@@ -144,17 +140,10 @@ export default function useUserForm({
         position: 'top-right',
       })
     } else {
-      /* Adding new data */
+      /* Add new data */
       const updatedData = [userData, ...tableData]
 
       setTableData(updatedData)
-
-      try {
-        saveUsersToStorage(updatedData)
-      } catch (error) {
-        console.error(CONSOLE_MSG.saveDataErr, error)
-        toast.error(TOAST_MSG.saveFail, { position: 'top-right' })
-      }
 
       // Toast Popup
       toast.success(USER_MESSAGES.saveSuccess, {
@@ -165,7 +154,7 @@ export default function useUserForm({
       setSelectedRow(null)
     }
 
-    /* CLEAR FORM*/
+    /* CLEAR FORM */
     setFormData({
       userName: '',
       email: '',

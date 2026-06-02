@@ -8,7 +8,7 @@
  ***********************************************************************************************
  */
 
- import { VALIDATION_MSG } from '../constants'
+import { VALIDATION_MSG } from '../constants'
 
 //This function will check if the name is empty or not. Can be used for other fields as well if needed to check NotIsEmpty.
 export function checkNotIsEmpty(name: string) {

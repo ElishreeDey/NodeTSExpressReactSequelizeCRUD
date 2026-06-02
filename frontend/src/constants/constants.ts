@@ -38,6 +38,8 @@ export const CONSOLE_MSG = {
   saveDataErr: 'Failed to save data:',
   loadDataErr: 'Failed to load data:',
   deleteDataErr: 'Failed to delete data:',
+  localStorageReadErr: 'Failed to read localStorage:',
+  localStorageSaveErr: 'Failed to save localStorage:',
 } as const
 
 /* Toast Error Messages */
