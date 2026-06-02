@@ -1,0 +1,29 @@
+{
+  "name": "nodetsexpressreactsequelizecrud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ElishreeDey/NodeTSExpressReactSequelizeCRUD.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ElishreeDey/NodeTSExpressReactSequelizeCRUD/issues"
+  },
+  "homepage": "https://github.com/ElishreeDey/NodeTSExpressReactSequelizeCRUD#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
+    "husky": "^9.1.7",
+    "prettier": "^3.8.3"
+  }
+}
