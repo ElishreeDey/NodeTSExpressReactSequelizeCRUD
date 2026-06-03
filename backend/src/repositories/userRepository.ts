@@ -19,7 +19,9 @@ export class UserRepository {
 
   // GET ALL USERS
   async getUsers() {
-    return await User.findAll()
+    return await User.findAll({
+      order: [['id', 'DESC']], // newest first
+  })
   }
 
   // GET USER BY ID
