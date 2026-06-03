@@ -20,8 +20,6 @@ export default function useUsers() {
     refresh,
   } = useApiData<EntryDataBase>('users')
 
-  const setTableData = () => {}
-
   const [editIndex, setEditIndex] = useState<number | null>(null)
 
   const [editUser, setEditUser] = useState<EntryDataBase | null>(null)
@@ -68,7 +66,6 @@ export default function useUsers() {
 
   return {
     tableData,
-    setTableData,
 
     createItem,
     updateItem,

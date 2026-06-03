@@ -9,7 +9,6 @@ export default function App() {
 
   const {
     tableData,
-    setTableData,
     createItem,
     updateItem,
     refresh,
@@ -39,7 +38,6 @@ export default function App() {
       <div className="pageContainer">
         <RenderForm
           tableData={tableData}
-          setTableData={setTableData}
           createItem={createItem}
           updateItem={updateItem}
           refresh={refresh}

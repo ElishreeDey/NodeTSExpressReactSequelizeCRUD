@@ -24,8 +24,6 @@ import type { EntryDataBase } from '../types'
 type UseUserFormProps = {
   tableData: EntryDataBase[]
 
-  setTableData: React.Dispatch<React.SetStateAction<EntryDataBase[]>>
-
   createItem: (item: EntryDataBase) => Promise<any>
 
   updateItem: (id: number, item: EntryDataBase) => Promise<any>
@@ -42,12 +40,9 @@ type UseUserFormProps = {
 }
 
 export default function useUserForm({
-  // tableData,
-  // setTableData,
   createItem,
   updateItem,
   refresh,
-  // editIndex,
   setEditIndex,
   editUser,
   setSelectedRow,
@@ -185,8 +180,7 @@ export default function useUserForm({
           position: 'top-right',
         })
       } else {
-
-      /* ADD USER */
+        /* ADD USER */
         await createItem({
           ...userData,
         } as EntryDataBase)

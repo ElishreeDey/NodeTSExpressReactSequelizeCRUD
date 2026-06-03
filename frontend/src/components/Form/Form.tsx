@@ -16,7 +16,6 @@ import type { EntryDataBase } from '../../types'
 /* FormProps - what props are coming into component, what datatype each prop must have */
 type FormProps = {
   tableData: EntryDataBase[]
-  setTableData: React.Dispatch<React.SetStateAction<EntryDataBase[]>>
 
   createItem: (item: EntryDataBase) => Promise<any>
   updateItem: (id: number, item: EntryDataBase) => Promise<any>
@@ -31,7 +30,6 @@ type FormProps = {
 // Here React component name is "RenderForm" which can be imported into other files.
 export default function RenderForm({
   tableData,
-  setTableData,
   createItem,
   updateItem,
   refresh,
@@ -42,7 +40,6 @@ export default function RenderForm({
 }: FormProps) {
   const { formData, handleChange, handleBlur, handleSubmit } = useUserForm({
     tableData,
-    setTableData,
     createItem,
     updateItem,
     refresh,
