@@ -42,17 +42,18 @@ type UseUserFormProps = {
 }
 
 export default function useUserForm({
-  //tableData,
-  //setTableData,
+  // tableData,
+  // setTableData,
   createItem,
   updateItem,
   refresh,
-  //editIndex,
+  // editIndex,
   setEditIndex,
   editUser,
   setSelectedRow,
 }: UseUserFormProps) {
-  const [formData, setFormData] = useState({
+  /* Initial Form State */
+  const INITIAL_FORM_STATE = {
     name: '',
     email: '',
     phone: '',
@@ -60,8 +61,12 @@ export default function useUserForm({
     mandatoryName: '*',
     mandatoryEmail: '*',
     mandatoryPhone: '*',
-  })
+  }
 
+  /* Form State */
+  const [formData, setFormData] = useState(INITIAL_FORM_STATE)
+
+  /* Load Edit User Data / Reset Form */
   useEffect(() => {
     if (editUser) {
       setFormData({
@@ -73,9 +78,12 @@ export default function useUserForm({
         mandatoryEmail: '*',
         mandatoryPhone: '*',
       })
+    } else {
+      setFormData(INITIAL_FORM_STATE)
     }
   }, [editUser])
 
+  /* Handle Input Change */
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -87,6 +95,7 @@ export default function useUserForm({
     }))
   }
 
+  /* Handle Field Validation */
   const handleBlur = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
@@ -122,9 +131,12 @@ export default function useUserForm({
     }
   }
 
+  /* Handle Form Submit */
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault()
+
     console.log(CONSOLE_MSG.msgSubmitBtnClk)
+
     try {
       const userData = {
         name: formData.name,
@@ -133,7 +145,7 @@ export default function useUserForm({
         gender: formData.gender,
       }
 
-      // EDIT USER
+      /* EDIT USER */
       if (editUser) {
         await updateItem(editUser.id, {
           id: editUser.id,
@@ -143,13 +155,14 @@ export default function useUserForm({
         await refresh()
 
         setEditIndex(null)
+        setSelectedRow(null)
 
         toast.success(USER_MESSAGES.editSuccess, {
           position: 'top-right',
         })
       }
 
-      // ADD USER
+      /* ADD USER */
       else {
         await createItem({
           ...userData,
@@ -162,17 +175,8 @@ export default function useUserForm({
         })
       }
 
-      setSelectedRow(null)
-
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        gender: '',
-        mandatoryName: '*',
-        mandatoryEmail: '*',
-        mandatoryPhone: '*',
-      })
+      /* Reset Form */
+      setFormData(INITIAL_FORM_STATE)
     } catch (error) {
       console.error(CONSOLE_MSG.failedToSubmitErr, error)
     }

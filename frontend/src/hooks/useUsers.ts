@@ -29,15 +29,10 @@ export default function useUsers() {
   const [selectedRow, setSelectedRow] = useState<number | null>(null)
 
   const resetFormState = () => {
-    /*setEditIndex(null)
-    setSelectedRow(null)
-    setEditUser({
-      name: '',
-      email: '',
-      phone: '',
-      gender:'',
-    })*/
-  }
+  setEditIndex(null)
+  setEditUser(null)
+  setSelectedRow(null)
+}
 
   const handleDelete = useCallback(
     async (index: number) => {
