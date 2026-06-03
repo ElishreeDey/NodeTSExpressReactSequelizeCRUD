@@ -99,7 +99,7 @@ export default function RenderTable({
                   <td
                     className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
                   >
-                    {user.username}
+                    {user.name}
                   </td>
 
                   <td

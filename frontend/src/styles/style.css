@@ -32,6 +32,45 @@ body {
   box-sizing: border-box;
 }
 
+.formLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Uniform grid spacing between elements */
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 3px; /* Spacing between label and input */
+}
+
+.formAction {
+  margin-top: 8px; /* Extra breathing room before the button */
+}
+
+.Toastify__toast button {
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  min-width: unset !important;
+}
+
+/* 2. Force the close button to align perfectly in the top-right corner */
+.Toastify__close-button {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  align-self: flex-start !important;
+}
+
+/* 3. Give the text message breathing room so it never touches the button */
+.Toastify__toast-body {
+  padding-right: 24px !important;
+  margin: 0 !important;
+}
+
 /* PAGE LAYOUT */
 .pageContainer {
   display: flex;
@@ -53,7 +92,7 @@ body {
 
 /* FORM CARD */
 .formCard {
-  width: 220px;
+  width: 250px;
   min-height: 415px;
   border-radius: 12px;
   flex-shrink: 0;
@@ -63,7 +102,7 @@ body {
 .tableCard {
   width: 760px;
   max-width: 100%;
-  min-height: 455px;
+  height: 455px;
   border-radius: 14px;
   display: flex;
   flex-direction: column;
@@ -73,10 +112,9 @@ body {
 /* TABLE WRAPPER */
 .tableWrapper {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
 }
 
 /* TABLE */
@@ -230,4 +268,23 @@ label {
     width: 100%;
     max-width: 400px;
   }
+}
+
+.pageContainer {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loadingText {
+  font-family: Arial, sans-serif;
+  color: #049c4f;
+  font-weight: bold;
 }

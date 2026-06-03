@@ -17,29 +17,43 @@ import {
   validateFlexiblePhone,
 } from '../utils/validation'
 
-import { USER_MESSAGES } from '../constants'
+import { CONSOLE_MSG, USER_MESSAGES } from '../constants'
 
 import type { EntryDataBase } from '../types'
 
 type UseUserFormProps = {
   tableData: EntryDataBase[]
+
   setTableData: React.Dispatch<React.SetStateAction<EntryDataBase[]>>
+
+  createItem: (item: EntryDataBase) => Promise<any>
+
+  updateItem: (id: number, item: EntryDataBase) => Promise<any>
+
+  refresh: () => Promise<void>
+
   editIndex: number | null
+
   setEditIndex: React.Dispatch<React.SetStateAction<number | null>>
+
   editUser: EntryDataBase | null
+
   setSelectedRow: React.Dispatch<React.SetStateAction<number | null>>
 }
 
 export default function useUserForm({
-  tableData,
-  setTableData,
-  editIndex,
+  //tableData,
+  //setTableData,
+  createItem,
+  updateItem,
+  refresh,
+  //editIndex,
   setEditIndex,
   editUser,
   setSelectedRow,
 }: UseUserFormProps) {
   const [formData, setFormData] = useState({
-    userName: '',
+    name: '',
     email: '',
     phone: '',
     gender: '',
@@ -48,11 +62,10 @@ export default function useUserForm({
     mandatoryPhone: '*',
   })
 
-  // useEffect is a React Hook. When editUser clicked , fill the form with that user's data.
   useEffect(() => {
     if (editUser) {
       setFormData({
-        userName: editUser.username,
+        name: editUser.name,
         email: editUser.email,
         phone: editUser.phone,
         gender: editUser.gender,
@@ -63,7 +76,6 @@ export default function useUserForm({
     }
   }, [editUser])
 
-  /* Handle Input Change */
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -75,12 +87,10 @@ export default function useUserForm({
     }))
   }
 
-  /* Handle Validation on Blur */
   const handleBlur = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
-    // Name Validation
-    if (name === 'userName') {
+    if (name === 'name') {
       const result = checkNotIsEmpty(value)
 
       setFormData((prev) => ({
@@ -90,7 +100,6 @@ export default function useUserForm({
       }))
     }
 
-    // Email Validation
     if (name === 'email') {
       const result = validateEmail(value)
 
@@ -101,7 +110,6 @@ export default function useUserForm({
       }))
     }
 
-    // Phone Validation
     if (name === 'phone') {
       const result = validateFlexiblePhone(value)
 
@@ -114,56 +122,60 @@ export default function useUserForm({
     }
   }
 
-  /* Handle Form Submit */
-  const handleSubmit = (e: SubmitEvent) => {
+  const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault()
+    console.log(CONSOLE_MSG.msgSubmitBtnClk)
+    try {
+      const userData = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        gender: formData.gender,
+      }
 
-    const userData = {
-      username: formData.userName,
-      email: formData.email,
-      phone: formData.phone,
-      gender: formData.gender,
-    }
+      // EDIT USER
+      if (editUser) {
+        await updateItem(editUser.id, {
+          id: editUser.id,
+          ...userData,
+        })
 
-    /* Edit existing data */
-    if (editIndex !== null) {
-      const updatedData = [...tableData]
+        await refresh()
 
-      updatedData[editIndex] = userData
+        setEditIndex(null)
 
-      setTableData(updatedData)
+        toast.success(USER_MESSAGES.editSuccess, {
+          position: 'top-right',
+        })
+      }
 
-      setEditIndex(null)
+      // ADD USER
+      else {
+        await createItem({
+          ...userData,
+        } as EntryDataBase)
 
-      // Toast Popup
-      toast.success(USER_MESSAGES.editSuccess, {
-        position: 'top-right',
-      })
-    } else {
-      /* Add new data */
-      const updatedData = [userData, ...tableData]
+        await refresh()
 
-      setTableData(updatedData)
+        toast.success(USER_MESSAGES.saveSuccess, {
+          position: 'top-right',
+        })
+      }
 
-      // Toast Popup
-      toast.success(USER_MESSAGES.saveSuccess, {
-        position: 'top-right',
-      })
-
-      setEditIndex(null)
       setSelectedRow(null)
-    }
 
-    /* CLEAR FORM */
-    setFormData({
-      userName: '',
-      email: '',
-      phone: '',
-      gender: '',
-      mandatoryName: '*',
-      mandatoryEmail: '*',
-      mandatoryPhone: '*',
-    })
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        gender: '',
+        mandatoryName: '*',
+        mandatoryEmail: '*',
+        mandatoryPhone: '*',
+      })
+    } catch (error) {
+      console.error(CONSOLE_MSG.failedToSubmitErr, error)
+    }
   }
 
   return {

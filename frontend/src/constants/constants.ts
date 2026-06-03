@@ -40,6 +40,15 @@ export const CONSOLE_MSG = {
   deleteDataErr: 'Failed to delete data:',
   localStorageReadErr: 'Failed to read localStorage:',
   localStorageSaveErr: 'Failed to save localStorage:',
+
+  failedToGetTokenErr: 'Failed to get token',
+  authenticationFailedErr:
+    'Authentication failed. Please check your connection.',
+  tokenSuccessMsg: 'Token stored successfully',
+  noTokenReturnErr: 'No token returned from server',
+
+  msgSubmitBtnClk: 'SUBMIT TRIGGERED',
+  failedToSubmitErr: 'Failed to save user:',
 } as const
 
 /* Toast Error Messages */

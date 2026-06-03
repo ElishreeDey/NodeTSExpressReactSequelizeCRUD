@@ -9,7 +9,8 @@
 //specify the entry data types
 //Interface name shouls start with capital
 export interface EntryDataBase {
-  username: string
+  id: number
+  name: string
   email: string
   phone: string
   gender: string

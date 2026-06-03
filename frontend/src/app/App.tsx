@@ -1,17 +1,18 @@
-import React from 'react'
-
 import { RenderForm, RenderTable } from '../components'
+import { useUsers, useAuth } from '../hooks'
 
-import { useUsers } from '../hooks'
-
-// These imports are for Toastify pop-ups
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 export default function App() {
+  const { isAuthenticating } = useAuth()
+
   const {
     tableData,
     setTableData,
+    createItem,
+    updateItem,
+    refresh,
     editIndex,
     setEditIndex,
     editUser,
@@ -21,6 +22,16 @@ export default function App() {
     handleEdit,
   } = useUsers()
 
+  if (isAuthenticating) {
+    return (
+      <div className="loadingContainer">
+        <p className="loadingText">
+          Unable to load application due to authentication failure...
+        </p>
+      </div>
+    )
+  }
+
   return (
     <>
       <ToastContainer position="top-right" autoClose={3000} />
@@ -29,6 +40,9 @@ export default function App() {
         <RenderForm
           tableData={tableData}
           setTableData={setTableData}
+          createItem={createItem}
+          updateItem={updateItem}
+          refresh={refresh}
           editIndex={editIndex}
           setEditIndex={setEditIndex}
           editUser={editUser}

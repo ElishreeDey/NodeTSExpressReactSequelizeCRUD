@@ -1,9 +1,7 @@
 /*
  ****************************************************************************************************************************
  * Filename    : useUsers
- * Description : Custom hook to manage user data, edit flow and localStorage operations
- * Author      : Elishree Dey Chand
- * Created     : 2026-06-01
+ * Description : Custom hook to manage user data, edit flow and API operations
  ****************************************************************************************************************************
  */
 
@@ -11,34 +9,57 @@ import { useState, useCallback } from 'react'
 
 import type { EntryDataBase } from '../types'
 
-import { useLocalStorage } from '../hooks'
+import { useApiData } from '../hooks'
 
 export default function useUsers() {
-  /* User Data State with localStorage Hook */
-  const { storedValue: tableData, setValue: setTableData } = useLocalStorage<
-    EntryDataBase[]
-  >('setLocalStorageJSON', [])
+  const {
+    data: tableData,
+    createItem,
+    updateItem,
+    deleteItem,
+    refresh,
+  } = useApiData<EntryDataBase>('users')
 
-  /* Which row is currently editing */
+  const setTableData = () => {}
+
   const [editIndex, setEditIndex] = useState<number | null>(null)
 
-  /* Take the edit row complete data */
   const [editUser, setEditUser] = useState<EntryDataBase | null>(null)
 
-  /* Row Highlight State */
   const [selectedRow, setSelectedRow] = useState<number | null>(null)
 
-  /* Which row to delete */
-  const handleDelete = useCallback(
-    (index: number) => {
-      const updatedData = tableData.filter((_, i) => i !== index)
+  const resetFormState = () => {
+    /*setEditIndex(null)
+    setSelectedRow(null)
+    setEditUser({
+      name: '',
+      email: '',
+      phone: '',
+      gender:'',
+    })*/
+  }
 
-      setTableData(updatedData)
+  const handleDelete = useCallback(
+    async (index: number) => {
+      try {
+        const selectedUser = tableData[index]
+
+        if (!selectedUser) return
+
+        console.log('Deleting User ID:', selectedUser.id)
+
+        await deleteItem(selectedUser.id)
+
+        resetFormState()
+
+        await refresh()
+      } catch (error) {
+        console.error('Delete failed:', error)
+      }
     },
-    [tableData, setTableData]
+    [tableData, deleteItem, refresh]
   )
 
-  /* Which row to edit */
   const handleEdit = useCallback(
     (index: number) => {
       const selectedUser = tableData[index]
@@ -53,6 +74,11 @@ export default function useUsers() {
   return {
     tableData,
     setTableData,
+
+    createItem,
+    updateItem,
+    refresh,
+
     editIndex,
     setEditIndex,
     editUser,
