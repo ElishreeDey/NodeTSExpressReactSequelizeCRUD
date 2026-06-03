@@ -124,7 +124,7 @@ export default function useUserForm({
 
       setFormData((prev) => ({
         ...prev,
-        phone: result.isValid ? result.formattedPhone : prev.phone,
+        phone: result.isValid ? result.formattedPhone : value,
         mandatoryPhone:
           value === '' ? '*' : result.isValid ? '' : result.errorMessage,
       }))
@@ -137,11 +137,35 @@ export default function useUserForm({
 
     console.log(CONSOLE_MSG.msgSubmitBtnClk)
 
+    /* Validate all fields before submit */
+    const nameValidation = checkNotIsEmpty(formData.name)
+    const emailValidation = validateEmail(formData.email)
+    const phoneValidation = validateFlexiblePhone(formData.phone)
+
+    setFormData((prev) => ({
+      ...prev,
+      mandatoryName: nameValidation.isValid ? '' : nameValidation.errorMessage,
+      mandatoryEmail: emailValidation.isValid
+        ? ''
+        : emailValidation.errorMessage,
+      mandatoryPhone: phoneValidation.isValid
+        ? ''
+        : phoneValidation.errorMessage,
+    }))
+
+    if (
+      !nameValidation.isValid ||
+      !emailValidation.isValid ||
+      !phoneValidation.isValid
+    ) {
+      return
+    }
+
     try {
       const userData = {
         name: formData.name,
         email: formData.email,
-        phone: formData.phone,
+        phone: phoneValidation.formattedPhone,
         gender: formData.gender,
       }
 
@@ -160,10 +184,9 @@ export default function useUserForm({
         toast.success(USER_MESSAGES.editSuccess, {
           position: 'top-right',
         })
-      }
+      } else {
 
       /* ADD USER */
-      else {
         await createItem({
           ...userData,
         } as EntryDataBase)
