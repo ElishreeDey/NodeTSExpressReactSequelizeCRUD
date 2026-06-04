@@ -61,9 +61,7 @@ export default function useApiData<T>(endpoint: string) {
       try {
         const res = await api.put<T>(`/${endpoint}/${id}`, item)
 
-        setData((prev) =>
-          prev.map((d: any) => (d.id === id ? res.data : d))
-        )
+        setData((prev) => prev.map((d: any) => (d.id === id ? res.data : d)))
 
         return res.data
       } catch (err) {
@@ -80,9 +78,7 @@ export default function useApiData<T>(endpoint: string) {
       try {
         await api.delete(`/${endpoint}/${id}`)
 
-        setData((prev) =>
-          prev.filter((d: any) => d.id !== id)
-        )
+        setData((prev) => prev.filter((d: any) => d.id !== id))
       } catch (err) {
         console.error(err)
         throw err
