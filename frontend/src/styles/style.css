@@ -3,7 +3,7 @@
   --primary-color: #049c4f;
   --primary-hover: #037e51;
   --success-light: #e8f7ee;
-  --danger-color: red;
+  --red-color: red;
   --body-bg: #e8f5e9;
   --card-bg: #ffffff;
   --border-color: #dfe5ec;
@@ -223,7 +223,7 @@ label {
 
 /* COMMON UTILITY CLASSES */
 .mandatory {
-  color: var(--danger-color);
+  color: var(--red-color);
 }
 
 .invisible {
