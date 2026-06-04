@@ -1,13 +1,27 @@
+/*
+ ****************************************************************************************************************************
+ * Filename    : useApiData
+ * Description : Reusable custom hook for CRUD operations using API endpoints
+ * Author      : Elishree Dey Chand
+ * Created     : 2026-06-04
+ ****************************************************************************************************************************
+ */
+
 import { useEffect, useState, useCallback } from 'react'
 
 import api from '../services/api'
 
 export default function useApiData<T>(endpoint: string) {
+  // Store API response data
   const [data, setData] = useState<T[]>([])
+
+  // Store loading state
   const [loading, setLoading] = useState<boolean>(false)
+
+  // Store API error message
   const [error, setError] = useState<string | null>(null)
 
-  /* GET ALL */
+  // Fetch all records
   const fetchData = useCallback(async () => {
     try {
       setLoading(true)
@@ -24,7 +38,7 @@ export default function useApiData<T>(endpoint: string) {
     }
   }, [endpoint])
 
-  /* CREATE */
+  // Create new record
   const createItem = useCallback(
     async (item: T) => {
       try {
@@ -41,13 +55,15 @@ export default function useApiData<T>(endpoint: string) {
     [endpoint]
   )
 
-  /* UPDATE */
+  // Update existing record
   const updateItem = useCallback(
     async (id: number, item: T) => {
       try {
         const res = await api.put<T>(`/${endpoint}/${id}`, item)
 
-        setData((prev) => prev.map((d: any) => (d.id === id ? res.data : d)))
+        setData((prev) =>
+          prev.map((d: any) => (d.id === id ? res.data : d))
+        )
 
         return res.data
       } catch (err) {
@@ -58,13 +74,15 @@ export default function useApiData<T>(endpoint: string) {
     [endpoint]
   )
 
-  /* DELETE */
+  // Delete existing record
   const deleteItem = useCallback(
     async (id: number) => {
       try {
         await api.delete(`/${endpoint}/${id}`)
 
-        setData((prev) => prev.filter((d: any) => d.id !== id))
+        setData((prev) =>
+          prev.filter((d: any) => d.id !== id)
+        )
       } catch (err) {
         console.error(err)
         throw err
@@ -73,7 +91,7 @@ export default function useApiData<T>(endpoint: string) {
     [endpoint]
   )
 
-  /* INITIAL LOAD */
+  // Load data on component mount
   useEffect(() => {
     fetchData()
   }, [fetchData])
