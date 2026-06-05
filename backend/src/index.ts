@@ -12,6 +12,7 @@ import express from 'express' // Express framework used to create backend server
 import dotenv from 'dotenv' // Reads environment variables from .env file
 import helmet from 'helmet' // Adds security headers to protect Express app
 import cors from 'cors' // Allows frontend apps to access backend APIs
+import morgan from 'morgan' // HTTP request logger — logs method, URL, status, response time
 
 /* Import Project Files */
 import sequelize from './config/db' // Sequelize database connection setup
@@ -49,6 +50,9 @@ app.use(
 
 // Converts incoming JSON request body into JS object. Required for POST and PUT APIs
 app.use(express.json())
+
+// Morgan HTTP Request Logger. Logs every incoming request with method, URL, status and response time
+app.use(morgan('dev'))
 
 // Rate Limiter Middleware should be added immediately after JSON parser and before routes so abusive requests are blocked early.
 app.use(apiRateLimiter)
