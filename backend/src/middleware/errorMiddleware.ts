@@ -9,17 +9,18 @@
 
 import { Request, Response, NextFunction } from 'express'
 
+import { MESSAGES } from '../constants/messages'
+
 export const errorMiddleware = (
   error: any,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  console.log('ERROR MIDDLEWARE:', error)
+  console.error(`[${MESSAGES.INTERNAL_SERVER_ERROR_MSG}]`, error)
 
+  // Send message to the client. Full error is in console.error
   res.status(error.status || 500).json({
-    message: error.message || 'Internal Server Error',
-
-    details: error.errors || null,
+    message: MESSAGES.SOMETHING_WENT_WRONG_MSG,
   })
 }

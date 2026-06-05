@@ -21,8 +21,11 @@ export const MESSAGES = {
   LOGIN_FAILED_MSG: 'Login failed',
   LOGIN_SUCCESS_MSG: 'Login successful',
   EMAIL_REQUIRED_MSG: 'Email is required to login',
+  MISSING_REQUIRED_ENV_MSG: 'Missing required environment variables:',
   MISSING_EVN_VARIABLE_MSG:
     'Missing required database environment variables. Please set DB_HOST, DB_PORT, DB_USER, DB_PASSWORD and DB_NAME in your .env file.',
+  INTERNAL_SERVER_ERROR_MSG: 'Internal Server Error',
+  SOMETHING_WENT_WRONG_MSG: 'Something went wrong. Please try again later.',
   DB_CON_SUCCESS_MSG: 'Database connected successfully',
   SERVER_RUNNING_ONPORT_MSG: 'Server running on port',
   RATE_LIMIT_EXCEED_MSG: 'Too many requests. Please try again later.',

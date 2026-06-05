@@ -25,6 +25,14 @@ import { MESSAGES } from './constants/messages'
 // config .env values
 dotenv.config()
 
+// Fail if any required environment variables are missing.
+const REQUIRED_ENV_VARS = ['JWT_SECRET', 'CLIENT_URL', 'DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_NAME']
+const missingVars = REQUIRED_ENV_VARS.filter((key) => !process.env[key])
+if (missingVars.length > 0) {
+  console.error(`${MESSAGES.MISSING_REQUIRED_ENV_MSG} ${missingVars.join(', ')}`)
+  process.exit(1)
+}
+
 // Create Express server instance
 const app = express()
 
@@ -48,8 +56,9 @@ app.use(
   })
 )
 
-// Converts incoming JSON request body into JS object. Required for POST and PUT APIs
-app.use(express.json())
+// Converts incoming JSON request body into JS object. Required for POST and PUT APIs.
+// limit:'10kb' prevents huge payloads to crash the server.
+app.use(express.json({ limit: '10kb' }))
 
 // Morgan HTTP Request Logger. Logs every incoming request with method, URL, status and response time
 app.use(morgan('dev'))
@@ -79,5 +88,5 @@ sequelize
   })
   .catch((error) => {
     // Handle DB connection/sync errors
-    console.log(error)
+    console.error(error)
   })
