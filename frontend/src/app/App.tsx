@@ -25,7 +25,7 @@ export default function App() {
     return (
       <div className="loadingContainer">
         <p className="loadingText">
-          Unable to load application due to authentication failure...
+          Unable to loading application
         </p>
       </div>
     )
