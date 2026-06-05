@@ -14,6 +14,9 @@ import axios from 'axios'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
+  // timeout: if the server does not respond within 10 seconds, Axios
+  // cancels the request and throws an error — prevents infinite loading
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
