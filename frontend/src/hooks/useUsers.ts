@@ -39,7 +39,7 @@ export default function useUsers() {
 
         if (!selectedUser) return
 
-        console.log('Deleting User ID:', selectedUser.id)
+        //console.log('Deleting User ID:', selectedUser.id)
 
         await deleteItem(selectedUser.id)
 

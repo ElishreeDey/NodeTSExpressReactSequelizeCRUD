@@ -130,7 +130,7 @@ export default function useUserForm({
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault()
 
-    console.log(CONSOLE_MSG.msgSubmitBtnClk)
+    //console.log(CONSOLE_MSG.msgSubmitBtnClk)
 
     /* Validate all fields before submit */
     const nameValidation = checkNotIsEmpty(formData.name)
