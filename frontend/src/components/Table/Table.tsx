@@ -95,7 +95,7 @@ export default function RenderTable({
               const isSelected = selectedRow === index
 
               return (
-                <tr key={index}>
+                <tr key={user.id}>
                   <td
                     className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
                   >
