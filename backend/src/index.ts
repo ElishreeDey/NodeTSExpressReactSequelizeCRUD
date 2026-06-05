@@ -13,6 +13,7 @@ import dotenv from 'dotenv' // Reads environment variables from .env file
 import helmet from 'helmet' // Adds security headers to protect Express app
 import cors from 'cors' // Allows frontend apps to access backend APIs
 import morgan from 'morgan' // HTTP request logger — logs method, URL, status, response time
+import cookieParser from 'cookie-parser' // Parses Cookie header so req.cookies is available
 
 /* Import Project Files */
 import sequelize from './config/db' // Sequelize database connection setup
@@ -26,10 +27,19 @@ import { MESSAGES } from './constants/messages'
 dotenv.config()
 
 // Fail if any required environment variables are missing.
-const REQUIRED_ENV_VARS = ['JWT_SECRET', 'CLIENT_URL', 'DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_NAME']
+const REQUIRED_ENV_VARS = [
+  'JWT_SECRET',
+  'CLIENT_URL',
+  'DB_HOST',
+  'DB_USER',
+  'DB_PASSWORD',
+  'DB_NAME',
+]
 const missingVars = REQUIRED_ENV_VARS.filter((key) => !process.env[key])
 if (missingVars.length > 0) {
-  console.error(`${MESSAGES.MISSING_REQUIRED_ENV_MSG} ${missingVars.join(', ')}`)
+  console.error(
+    `${MESSAGES.MISSING_REQUIRED_ENV_MSG} ${missingVars.join(', ')}`
+  )
   process.exit(1)
 }
 
@@ -55,6 +65,9 @@ app.use(
     credentials: true,
   })
 )
+
+// Parses Cookie header on every request so req.cookies is available in controllers and middleware
+app.use(cookieParser())
 
 // Converts incoming JSON request body into JS object. Required for POST and PUT APIs.
 // limit:'10kb' prevents huge payloads to crash the server.
@@ -82,9 +95,21 @@ sequelize
     console.log(MESSAGES.DB_CON_SUCCESS_MSG)
 
     // Start Express server after DB connection
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       console.log(`${MESSAGES.SERVER_RUNNING_ONPORT_MSG} ${PORT}`)
     })
+
+    // Graceful shutdown — finish active requests and close DB before exiting.
+    // SIGTERM is sent by docker stop, pm2 restart, cloud deploys.
+    // SIGINT is sent by Ctrl+C in local dev.
+    const shutdown = () => {
+      server.close(() => {
+        sequelize.close()
+        process.exit(0)
+      })
+    }
+    process.on('SIGTERM', shutdown)
+    process.on('SIGINT', shutdown)
   })
   .catch((error) => {
     // Handle DB connection/sync errors

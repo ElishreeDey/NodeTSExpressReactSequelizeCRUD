@@ -17,19 +17,12 @@ const api = axios.create({
   // timeout: if the server does not respond within 10 seconds, Axios
   // cancels the request and throws an error — prevents infinite loading
   timeout: 10000,
+  // withCredentials: tells the browser to send HttpOnly cookies automatically
+  // on every request — no manual token handling needed
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
-})
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token')
-
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
-
-  return config
 })
 
 export default api

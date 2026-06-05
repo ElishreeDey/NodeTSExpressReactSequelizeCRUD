@@ -20,6 +20,7 @@ import { DELETE_CONFIRM_MODAL } from '../../constants'
 /* Props Type */
 type TableProps = {
   tableData: EntryDataBase[]
+  loading: boolean
   onDelete: (index: number) => void
   onEdit: (index: number) => void
   selectedRow: number | null
@@ -29,6 +30,7 @@ type TableProps = {
 /* Component */
 export default function RenderTable({
   tableData,
+  loading,
   onDelete,
   onEdit,
   selectedRow,
@@ -88,74 +90,89 @@ export default function RenderTable({
             </tr>
           </thead>
 
-          {/* Table Body - Loop through tableData and render each user row */}
+          {/* Table Body - spinner while loading, empty state if no data, rows otherwise */}
           <tbody>
-            {tableData.map((user, index) => {
-              /* Check if current row is selected, used to apply row highlight styling */
-              const isSelected = selectedRow === index
+            {loading ? (
+              <tr>
+                <td colSpan={5} className="tableStateCell">
+                  <div className="tableSpinner" />
+                </td>
+              </tr>
+            ) : tableData.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="tableStateCell">
+                  No records found
+                </td>
+              </tr>
+            ) : null}
 
-              return (
-                <tr key={user.id}>
-                  <td
-                    className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
-                  >
-                    {user.name}
-                  </td>
+            {!loading &&
+              tableData.map((user, index) => {
+                /* Check if current row is selected, used to apply row highlight styling */
+                const isSelected = selectedRow === index
 
-                  <td
-                    className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
-                  >
-                    {user.email}
-                  </td>
+                return (
+                  <tr key={user.id}>
+                    <td
+                      className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
+                    >
+                      {user.name}
+                    </td>
 
-                  <td
-                    className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
-                  >
-                    {user.phone}
-                  </td>
+                    <td
+                      className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
+                    >
+                      {user.email}
+                    </td>
 
-                  <td
-                    className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
-                  >
-                    {user.gender}
-                  </td>
+                    <td
+                      className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
+                    >
+                      {user.phone}
+                    </td>
 
-                  <td
-                    className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
-                  >
-                    {/* Edit Icon
+                    <td
+                      className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
+                    >
+                      {user.gender}
+                    </td>
+
+                    <td
+                      className={`storedDataCol ${isSelected ? 'highlightRow' : ''}`}
+                    >
+                      {/* Edit Icon
                         1. Highlight selected row
                         2. Open form with selected row data
                     */}
-                    <img
-                      src={editIcon}
-                      className="editDeleteIcon"
-                      alt="Edit"
-                      onClick={() => {
-                        setSelectedRow(index)
-                        onEdit(index)
-                      }}
-                    />
+                      <img
+                        src={editIcon}
+                        className="editDeleteIcon"
+                        alt="Edit"
+                        onClick={() => {
+                          setSelectedRow(index)
+                          onEdit(index)
+                        }}
+                      />
 
-                    {/* Delete Icon
+                      {/* Delete Icon
                         1. Highlight selected row
                         2. Store delete index
                         3. Open confirmation modal
                     */}
-                    <img
-                      src={deleteIcon}
-                      className="editDeleteIcon"
-                      alt="Delete"
-                      onClick={() => {
-                        setSelectedRow(index)
-                        setDeleteIndex(index)
-                        setShowModal(true)
-                      }}
-                    />
-                  </td>
-                </tr>
-              )
-            })}
+                      <img
+                        src={deleteIcon}
+                        className="editDeleteIcon"
+                        alt="Delete"
+                        onClick={() => {
+                          setSelectedRow(index)
+                          setDeleteIndex(index)
+                          setShowModal(true)
+                        }}
+                      />
+                    </td>
+                  </tr>
+                )
+              })}
           </tbody>
         </table>
       </div>

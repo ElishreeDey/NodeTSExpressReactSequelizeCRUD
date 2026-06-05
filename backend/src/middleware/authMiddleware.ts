@@ -18,18 +18,15 @@ export const authMiddleware = (
   next: NextFunction
 ) => {
   try {
-    // Read Authorization Header
-    const authHeader = req.headers.authorization
+    // Read token from HttpOnly cookie (set by login endpoint)
+    const token = req.cookies?.token
 
     // Check token exists
-    if (!authHeader) {
+    if (!token) {
       return res.status(401).json({
         message: MESSAGES.TOKEN_MISSING_MSG,
       })
     }
-
-    // Remove Bearer
-    const token = authHeader.split(' ')[1]
 
     // Verify JWT
     verifyToken(token)

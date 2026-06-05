@@ -17,7 +17,7 @@ import {
   validateFlexiblePhone,
 } from '../utils/validation'
 
-import { CONSOLE_MSG, USER_MESSAGES } from '../constants'
+import { CONSOLE_MSG, USER_MESSAGES, TOAST_MSG } from '../constants'
 
 import type { EntryDataBase } from '../types'
 
@@ -196,6 +196,7 @@ export default function useUserForm({
       setFormData(INITIAL_FORM_STATE)
     } catch (error) {
       console.error(CONSOLE_MSG.failedToSubmitErr, error)
+      toast.error(TOAST_MSG.saveFail)
     }
   }
 

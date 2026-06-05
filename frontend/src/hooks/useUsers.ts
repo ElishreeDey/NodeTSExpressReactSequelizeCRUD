@@ -7,13 +7,17 @@
 
 import { useState, useCallback } from 'react'
 
+//import { toast } from 'react-toastify'
+
 import type { EntryDataBase } from '../types'
 
 import { useApiData } from '../hooks'
+//import { TOAST_MSG } from '../constants'
 
 export default function useUsers() {
   const {
     data: tableData,
+    loading,
     createItem,
     updateItem,
     deleteItem,
@@ -66,6 +70,7 @@ export default function useUsers() {
 
   return {
     tableData,
+    loading,
 
     createItem,
     updateItem,

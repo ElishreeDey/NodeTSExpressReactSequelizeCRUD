@@ -20,22 +20,18 @@ export function useAuth() {
     // Authenticate user and store token
     const authenticate = async () => {
       try {
-        const token = await authService.getToken()
+        // Check if a valid cookie token already exists
+        await authService.verifyToken()
+      } catch {
+        // Cookie missing or expired — get a fresh token
+        try {
+          await authService.getToken()
+        } catch (error) {
+          // Handle authentication failure
+          console.error(CONSOLE_MSG.failedToGetTokenErr, error)
 
-        // Validate token response
-        if (!token) {
-          throw new Error(CONSOLE_MSG.noTokenReturnErr)
+          toast.error(CONSOLE_MSG.authenticationFailedErr)
         }
-
-        // Save token in local storage
-        localStorage.setItem('token', token)
-
-        console.log(CONSOLE_MSG.tokenSuccessMsg)
-      } catch (error) {
-        // Handle authentication failure
-        console.error(CONSOLE_MSG.failedToGetTokenErr, error)
-
-        toast.error(CONSOLE_MSG.authenticationFailedErr)
       } finally {
         // Mark authentication process complete
         setIsAuthenticating(false)
@@ -45,5 +41,7 @@ export function useAuth() {
     authenticate()
   }, [])
 
-  return { isAuthenticating }
+  return {
+    isAuthenticating,
+  }
 }

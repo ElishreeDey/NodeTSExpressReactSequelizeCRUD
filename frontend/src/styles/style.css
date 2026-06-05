@@ -276,6 +276,30 @@ label {
   padding: 20px;
 }
 
+/* TABLE EMPTY STATE AND LOADING SPINNER */
+.tableStateCell {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+  font-size: 13px;
+}
+
+.tableSpinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--success-light);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .loadingContainer {
   display: flex;
   justify-content: center;

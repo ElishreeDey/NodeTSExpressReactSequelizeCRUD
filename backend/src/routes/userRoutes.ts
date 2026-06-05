@@ -17,6 +17,11 @@ const router = express.Router()
 /* Login Route - Generate JWT Token */
 router.post('/login', login)
 
+/* Verify Route - Check if existing cookie token is still valid (used by frontend to skip re-login) */
+router.get('/verify', authMiddleware, (_req, res) =>
+  res.status(200).json({ valid: true })
+)
+
 /* Create a new user */
 router.post('/users', authMiddleware, createUser)
 

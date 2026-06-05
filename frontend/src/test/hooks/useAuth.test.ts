@@ -15,9 +15,10 @@ import { authService } from '../../services'
 import { toast } from 'react-toastify'
 import { CONSOLE_MSG } from '../../constants'
 
-// Mock auth service
+// Mock auth service — includes both verifyToken and getToken
 vi.mock('../../services', () => ({
   authService: {
+    verifyToken: vi.fn(),
     getToken: vi.fn(),
   },
 }))
@@ -29,39 +30,43 @@ vi.mock('react-toastify', () => ({
   },
 }))
 
-// Mock localStorage
-const setItemMock = vi.fn()
-
-Object.defineProperty(window, 'localStorage', {
-  value: {
-    setItem: setItemMock,
-    getItem: vi.fn(),
-    removeItem: vi.fn(),
-  },
-  writable: true,
-})
-
 describe('useAuth Hook', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  // Verify token is stored
-  it('stores token in localStorage', async () => {
-    vi.mocked(authService.getToken).mockResolvedValue('sample-token')
+  // Verify: valid cookie skips login entirely
+  it('skips login when verifyToken succeeds (valid cookie exists)', async () => {
+    vi.mocked(authService.verifyToken).mockResolvedValue({} as any)
 
-    renderHook(() => useAuth())
+    const { result } = renderHook(() => useAuth())
 
     await waitFor(() => {
-      expect(setItemMock).toHaveBeenCalledWith('token', 'sample-token')
+      expect(result.current.isAuthenticating).toBe(false)
     })
 
+    expect(authService.verifyToken).toHaveBeenCalled()
+    expect(authService.getToken).not.toHaveBeenCalled()
+  })
+
+  // Verify: expired/missing cookie triggers fresh login
+  it('calls getToken when verifyToken fails (cookie missing or expired)', async () => {
+    vi.mocked(authService.verifyToken).mockRejectedValue(new Error('401'))
+    vi.mocked(authService.getToken).mockResolvedValue({} as any)
+
+    const { result } = renderHook(() => useAuth())
+
+    await waitFor(() => {
+      expect(result.current.isAuthenticating).toBe(false)
+    })
+
+    expect(authService.verifyToken).toHaveBeenCalled()
     expect(authService.getToken).toHaveBeenCalled()
   })
 
-  // Verify authentication completes after success
-  it('sets isAuthenticating to false after success', async () => {
-    vi.mocked(authService.getToken).mockResolvedValue('sample-token')
+  // Verify: isAuthenticating is false after successful verifyToken
+  it('sets isAuthenticating to false after verifyToken succeeds', async () => {
+    vi.mocked(authService.verifyToken).mockResolvedValue({} as any)
 
     const { result } = renderHook(() => useAuth())
 
@@ -70,11 +75,22 @@ describe('useAuth Hook', () => {
     })
   })
 
-  // Verify toast on API failure
-  it('shows toast error when authentication fails', async () => {
-    vi.mocked(authService.getToken).mockRejectedValue(
-      new Error('Authentication Failed')
-    )
+  // Verify: isAuthenticating is false after successful getToken (fallback login)
+  it('sets isAuthenticating to false after getToken succeeds', async () => {
+    vi.mocked(authService.verifyToken).mockRejectedValue(new Error('401'))
+    vi.mocked(authService.getToken).mockResolvedValue({} as any)
+
+    const { result } = renderHook(() => useAuth())
+
+    await waitFor(() => {
+      expect(result.current.isAuthenticating).toBe(false)
+    })
+  })
+
+  // Verify: toast shown when both verifyToken and getToken fail
+  it('shows toast error when both verifyToken and getToken fail', async () => {
+    vi.mocked(authService.verifyToken).mockRejectedValue(new Error('401'))
+    vi.mocked(authService.getToken).mockRejectedValue(new Error('Login failed'))
 
     renderHook(() => useAuth())
 
@@ -85,29 +101,15 @@ describe('useAuth Hook', () => {
     })
   })
 
-  // Verify loading state after failure
-  it('sets isAuthenticating to false after failure', async () => {
-    vi.mocked(authService.getToken).mockRejectedValue(
-      new Error('Authentication Failed')
-    )
+  // Verify: isAuthenticating false even when both calls fail
+  it('sets isAuthenticating to false after both verifyToken and getToken fail', async () => {
+    vi.mocked(authService.verifyToken).mockRejectedValue(new Error('401'))
+    vi.mocked(authService.getToken).mockRejectedValue(new Error('Login failed'))
 
     const { result } = renderHook(() => useAuth())
 
     await waitFor(() => {
       expect(result.current.isAuthenticating).toBe(false)
-    })
-  })
-
-  // Verify missing token handling
-  it('shows toast when no token is returned', async () => {
-    vi.mocked(authService.getToken).mockResolvedValue(null as any)
-
-    renderHook(() => useAuth())
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        CONSOLE_MSG.authenticationFailedErr
-      )
     })
   })
 })

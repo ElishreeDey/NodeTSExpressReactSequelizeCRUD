@@ -34,11 +34,19 @@ export const login = async (
       email,
     })
 
-    // Send Response
-    res.status(200).json({
-      message: MESSAGES.LOGIN_SUCCESS_MSG,
-      token,
+    // Set token as HttpOnly cookie — browser stores it automatically.
+    // HttpOnly: JS cannot read it (blocks XSS token theft).
+    // secure: HTTPS only in production, allows HTTP in local dev.
+    // sameSite strict: cookie is not sent on cross-site requests (blocks CSRF).
+    // maxAge: cookie expires after 1 day.
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000,
     })
+
+    res.status(200).json({ message: MESSAGES.LOGIN_SUCCESS_MSG })
   } catch (error) {
     next(error)
   }

@@ -9,6 +9,7 @@ export default function App() {
 
   const {
     tableData,
+    loading,
     createItem,
     updateItem,
     refresh,
@@ -24,9 +25,7 @@ export default function App() {
   if (isAuthenticating) {
     return (
       <div className="loadingContainer">
-        <p className="loadingText">
-          Unable to loading application
-        </p>
+        <p className="loadingText">Unable to loading application</p>
       </div>
     )
   }
@@ -49,6 +48,7 @@ export default function App() {
 
         <RenderTable
           tableData={tableData}
+          loading={loading}
           onDelete={handleDelete}
           onEdit={handleEdit}
           selectedRow={selectedRow}
