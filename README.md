@@ -190,4 +190,4 @@ PostgreSQL Database
 ```
 ## Application Preview
 
-![Application Home Screen](./screenshots/applicationScreenshot.png)
+![Application Home Screen](./screenshots/applicationScreenshot.jpg)
