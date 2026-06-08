@@ -188,7 +188,3 @@ Sequelize ORM
 ▼
 PostgreSQL Database
 ```
-
-## Application Preview
-
-![Application Home Screen](./screenshots/applicationScreenshot.png)
