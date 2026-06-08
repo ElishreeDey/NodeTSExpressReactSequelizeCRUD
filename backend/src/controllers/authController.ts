@@ -9,8 +9,8 @@
 
 import { Request, Response, NextFunction } from 'express'
 
-import { generateToken } from '../helpers/authHelper'
-import { MESSAGES } from '../constants/messages'
+import { generateToken } from '../helpers'
+import { MESSAGES } from '../constants'
 
 // LOGIN API
 export const login = async (

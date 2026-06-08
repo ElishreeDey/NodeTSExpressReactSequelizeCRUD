@@ -16,12 +16,10 @@ import morgan from 'morgan' // HTTP request logger — logs method, URL, status,
 import cookieParser from 'cookie-parser' // Parses Cookie header so req.cookies is available
 
 /* Import Project Files */
-import sequelize from './config/db' // Sequelize database connection setup
-import userRoutes from './routes/userRoutes' // User CRUD route
-import { errorMiddleware } from './middleware/errorMiddleware'
-import { apiRateLimiter } from './middleware/rateLimitMiddleware'
-
-import { MESSAGES } from './constants/messages'
+import sequelize from './config' // Sequelize database connection setup
+import userRoutes from './routes' // User CRUD route
+import { errorMiddleware, apiRateLimiter } from './middleware'
+import { MESSAGES } from './constants'
 
 // config .env values
 dotenv.config()

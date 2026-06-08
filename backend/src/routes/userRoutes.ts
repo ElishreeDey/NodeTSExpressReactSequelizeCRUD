@@ -1,15 +1,7 @@
 /* Import Express */
 import express from 'express'
-import { authMiddleware } from '../middleware/authMiddleware'
-import { login } from '../controllers/authController'
-
-import {
-  createUser, // Create new user
-  getUsers, // Get all users
-  getUserById, // Get single user by ID
-  updateUser, // Update existing user
-  deleteUser, // Delete user
-} from '../controllers/userController'
+import { authMiddleware } from '../middleware'
+import { login, createUser, getUsers, getUserById, updateUser, deleteUser } from '../controllers'
 
 /* Create Express Router it helps separate routes from main app file*/
 const router = express.Router()

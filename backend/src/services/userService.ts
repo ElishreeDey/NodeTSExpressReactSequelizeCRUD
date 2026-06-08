@@ -7,9 +7,9 @@
  ****************************************************************************************************************************
  */
 
-import { UserRepository } from '../repositories/userRepository'
+import { UserRepository } from '../repositories'
 
-import { UserAttributes } from '../types/userTypes'
+import { UserAttributes } from '../types'
 
 const userRepository = new UserRepository()
 
