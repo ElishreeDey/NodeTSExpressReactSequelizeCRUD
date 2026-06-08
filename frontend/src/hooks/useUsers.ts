@@ -7,12 +7,11 @@
 
 import { useState, useCallback } from 'react'
 
-//import { toast } from 'react-toastify'
-
 import type { EntryDataBase } from '../types'
 
 import { useApiData } from '../hooks'
-//import { TOAST_MSG } from '../constants'
+
+import { CONSOLE_MSG } from '../constants'
 
 export default function useUsers() {
   const {
@@ -51,7 +50,7 @@ export default function useUsers() {
 
         await refresh()
       } catch (error) {
-        console.error('Delete failed:', error)
+        console.error(CONSOLE_MSG.deleteDataErr, error)
       }
     },
     [tableData, deleteItem, refresh]
