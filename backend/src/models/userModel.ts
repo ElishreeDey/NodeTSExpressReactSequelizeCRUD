@@ -11,10 +11,10 @@
 import { DataTypes, Model } from 'sequelize'
 
 // Database connection instance
-import sequelize from '../config/db'
+import sequelize from '../config'
 
 // TypeScript interface for User fields
-import { UserAttributes } from '../types/userTypes'
+import { UserAttributes } from '../types'
 
 /* Create User Model Class. This class maps to PostgreSQL table: users*/
 class User extends Model<UserAttributes> implements UserAttributes {

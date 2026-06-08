@@ -10,7 +10,7 @@
 // JWT are JWT default functions used for create token. JWtPayload is an named interface which tells typescript that its a decoded form
 import jwt, { JwtPayload } from 'jsonwebtoken'
 
-import { MESSAGES } from '../constants/messages'
+import { MESSAGES } from '../constants'
 
 // Read JWT Secret from .env
 const JWT_SECRET = process.env.JWT_SECRET

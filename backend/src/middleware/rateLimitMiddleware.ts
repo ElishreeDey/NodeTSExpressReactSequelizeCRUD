@@ -9,7 +9,7 @@
 
 import rateLimit from 'express-rate-limit'
 
-import { MESSAGES } from '../constants/messages'
+import { MESSAGES } from '../constants'
 
 export const apiRateLimiter = rateLimit({
   // Time window: 15 minutes

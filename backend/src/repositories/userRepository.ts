@@ -7,9 +7,9 @@
  ****************************************************************************************************************************
  */
 
-import User from '../models/userModel'
+import User from '../models'
 
-import { UserAttributes } from '../types/userTypes'
+import { UserAttributes } from '../types'
 
 export class UserRepository {
   // CREATE USER
