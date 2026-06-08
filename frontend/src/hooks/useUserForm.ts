@@ -7,7 +7,7 @@
  ****************************************************************************************************************************
  */
 
-import React, { useState, ChangeEvent, SubmitEvent, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { toast } from 'react-toastify'
 
@@ -80,7 +80,7 @@ export default function useUserForm({
 
   /* Handle Input Change */
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target
 
@@ -91,7 +91,7 @@ export default function useUserForm({
   }
 
   /* Handle Field Validation */
-  const handleBlur = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
     if (name === 'name') {
@@ -127,7 +127,7 @@ export default function useUserForm({
   }
 
   /* Handle Form Submit */
-  const handleSubmit = async (e: SubmitEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
 
     //console.log(CONSOLE_MSG.msgSubmitBtnClk)
