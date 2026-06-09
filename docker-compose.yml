@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+
+  # ─── Backend (Node.js / Express / Sequelize) ─────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      target: development
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./backend/.env
+    environment:
+      # host.docker.internal resolves to your Windows host machine from inside any Docker container
+      DB_HOST: host.docker.internal
+    volumes:
+      - ./backend:/app
+      # Anonymous volume prevents Windows host node_modules from overwriting the container's Linux modules
+      - /app/node_modules
+      - /app/dist
+
+  # ─── Frontend (React / Vite) ─────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      target: development
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./frontend/.env
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
