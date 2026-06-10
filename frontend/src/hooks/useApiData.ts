@@ -13,7 +13,8 @@ import { userService } from '../services'
 
 import type { EntryDataBase } from '../types'
 
-export default function useApiData<T extends EntryDataBase>(endpoint: string) {
+// enabled defaults to true; pass false to skip the initial fetch (e.g. while auth is in progress)
+export default function useApiData<T extends EntryDataBase>(endpoint: string, enabled = true) {
   // Store API response data
   const [data, setData] = useState<T[]>([])
 
@@ -89,10 +90,10 @@ export default function useApiData<T extends EntryDataBase>(endpoint: string) {
     [endpoint]
   )
 
-  // Load data on component mount
+  // Fetch only after auth completes — prevents a 401 on first load before the cookie is set
   useEffect(() => {
-    fetchData()
-  }, [fetchData])
+    if (enabled) fetchData()
+  }, [fetchData, enabled])
 
   return {
     data,

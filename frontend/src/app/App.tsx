@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css'
 export default function App() {
   const { isAuthenticating } = useAuth()
 
+  // Pass !isAuthenticating so data fetch waits until the auth cookie is set
   const {
     tableData,
     loading,
@@ -20,7 +21,7 @@ export default function App() {
     setSelectedRow,
     handleDelete,
     handleEdit,
-  } = useUsers()
+  } = useUsers(!isAuthenticating)
 
   if (isAuthenticating) {
     return (

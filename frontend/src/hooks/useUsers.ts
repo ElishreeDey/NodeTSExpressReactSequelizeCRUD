@@ -13,7 +13,7 @@ import { useApiData } from '../hooks'
 
 import { CONSOLE_MSG } from '../constants'
 
-export default function useUsers() {
+export default function useUsers(enabled = true) {
   const {
     data: tableData,
     loading,
@@ -21,7 +21,7 @@ export default function useUsers() {
     updateItem,
     deleteItem,
     refresh,
-  } = useApiData<EntryDataBase>('users')
+  } = useApiData<EntryDataBase>('users', enabled)
 
   const [editIndex, setEditIndex] = useState<number | null>(null)
 
