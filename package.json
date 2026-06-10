@@ -2,12 +2,35 @@
   "name": "nodetsexpressreactsequelizecrud",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+
+  "//private": "Must be true to use npm workspaces — prevents accidental publish of the monorepo root",
+  "private": true,
+
+  "//workspaces": "Declares the two workspace packages",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+
   "scripts": {
+
+    "//dev": "Starts backend and frontend in parallel using concurrently — single command for full-stack dev",
+    "dev": "concurrently \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+
+    "//build": "Builds backend first, then frontend",
+    "build": "npm run build -w backend && npm run build -w frontend",
+
+    "//start": "Runs the compiled backend server (requires a prior 'npm run build')",
+    "start": "npm run start -w backend",
+
+    "//test": "Runs both workspace test suites in parallel via concurrently",
+    "test": "concurrently \"npm run test -w backend\" \"npm run test -w frontend\"",
+
     "prepare": "husky",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ElishreeDey/NodeTSExpressReactSequelizeCRUD.git"
@@ -15,14 +38,15 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/ElishreeDey/NodeTSExpressReactSequelizeCRUD/issues"
   },
   "homepage": "https://github.com/ElishreeDey/NodeTSExpressReactSequelizeCRUD#readme",
+
   "devDependencies": {
     "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^21.0.2",
+    "concurrently": "^9.1.2",
     "husky": "^9.1.7",
     "prettier": "^3.8.3"
   }

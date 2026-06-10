@@ -10,14 +10,14 @@
 import rateLimit from 'express-rate-limit'
 
 import { MESSAGES } from '../constants'
+import { keys } from '../config'
 
 export const apiRateLimiter = rateLimit({
   // Time window: 15 minutes
   windowMs: 15 * 60 * 1000,
 
-  // Max requests allowed per IP, e.g: if max is 5 then in 15min max 5 calls are possible.
-  //max: 5,
-  max: Number(process.env.RATE_LIMIT_MAX) || 100,
+  // Max requests per IP — value comes from key > RATE_LIMIT_MAX in .env
+  max: keys.rateLimitMax,
 
   // Response when limit exceeded
   message: {

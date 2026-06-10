@@ -9,7 +9,6 @@
 
 /* Import Required Packages */
 import express from 'express' // Express framework used to create backend server and APIs
-import dotenv from 'dotenv' // Reads environment variables from .env file
 import helmet from 'helmet' // Adds security headers to protect Express app
 import cors from 'cors' // Allows frontend apps to access backend APIs
 import morgan from 'morgan' // HTTP request logger — logs method, URL, status, response time
@@ -17,29 +16,10 @@ import cookieParser from 'cookie-parser' // Parses Cookie header so req.cookies 
 
 /* Import Project Files */
 import sequelize from './config' // Sequelize database connection setup
+import { keys } from './config' // Pre-validated environment variables
 import userRoutes from './routes' // User CRUD route
 import { errorMiddleware, apiRateLimiter } from './middleware'
 import { MESSAGES } from './constants'
-
-// config .env values
-dotenv.config()
-
-// Fail if any required environment variables are missing.
-const REQUIRED_ENV_VARS = [
-  'JWT_SECRET',
-  'CLIENT_URL',
-  'DB_HOST',
-  'DB_USER',
-  'DB_PASSWORD',
-  'DB_NAME',
-]
-const missingVars = REQUIRED_ENV_VARS.filter((key) => !process.env[key])
-if (missingVars.length > 0) {
-  console.error(
-    `${MESSAGES.MISSING_REQUIRED_ENV_MSG} ${missingVars.join(', ')}`
-  )
-  process.exit(1)
-}
 
 // Create Express server instance
 const app = express()
@@ -54,7 +34,7 @@ app.use(helmet())
 app.use(
   cors({
     // Allowed Frontend URL to access the backend.
-    origin: process.env.CLIENT_URL,
+    origin: keys.clientUrl,
 
     // Allowed HTTP Methods
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -83,8 +63,7 @@ app.use('/api', userRoutes)
 // Error Middleware. errorMiddleware must be LAST app.use()
 app.use(errorMiddleware)
 
-// Read port from .env if not available use default 3000
-const PORT = process.env.PORT || 3000
+const PORT = keys.port
 
 // Sync Sequelize models with PostgreSQL Database Connection. Creates tables automatically if missing
 sequelize

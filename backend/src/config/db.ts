@@ -8,29 +8,14 @@
  */
 
 import { Sequelize } from 'sequelize'
-import dotenv from 'dotenv'
 
-import { MESSAGES } from '../constants/messages'
+import { keys } from './keys'
 
-dotenv.config()
-
-// Read Environment Variables
-const DB_HOST = process.env.DB_HOST
-const DB_PORT = process.env.DB_PORT
-const DB_USER = process.env.DB_USER
-const DB_PASSWORD = process.env.DB_PASSWORD
-const DB_NAME = process.env.DB_NAME
-
-// Validate Environment Variables
-if (!DB_HOST || !DB_PORT || !DB_USER || !DB_PASSWORD || !DB_NAME) {
-  throw new Error(MESSAGES.MISSING_EVN_VARIABLE_MSG)
-}
-
-// Create Sequelize Instance
-const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
-  host: DB_HOST,
+// Create Sequelize Instance — keys.ts already validated all DB vars at startup
+const sequelize = new Sequelize(keys.db.name, keys.db.user, keys.db.password, {
+  host: keys.db.host,
   dialect: 'postgres',
-  port: Number(DB_PORT),
+  port: keys.db.port,
   logging: false,
 
   // Connection Pool
