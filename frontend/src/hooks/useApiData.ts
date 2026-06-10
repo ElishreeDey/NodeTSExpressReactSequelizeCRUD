@@ -9,9 +9,11 @@
 
 import { useEffect, useState, useCallback } from 'react'
 
-import api from '../services/api'
+import { userService } from '../services'
 
-export default function useApiData<T>(endpoint: string) {
+import type { EntryDataBase } from '../types'
+
+export default function useApiData<T extends EntryDataBase>(endpoint: string) {
   // Store API response data
   const [data, setData] = useState<T[]>([])
 
@@ -21,15 +23,15 @@ export default function useApiData<T>(endpoint: string) {
   // Store API error message
   const [error, setError] = useState<string | null>(null)
 
-  // Fetch all records
+  // Fetch all records — delegates to userService so the hook owns only state logic
   const fetchData = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
 
-      const res = await api.get<T[]>(`/${endpoint}`)
+      const res = await userService.getAll()
 
-      setData(res.data)
+      setData(res.data as T[])
     } catch (err) {
       console.error(err)
       setError('Failed to fetch data')
@@ -42,9 +44,9 @@ export default function useApiData<T>(endpoint: string) {
   const createItem = useCallback(
     async (item: T) => {
       try {
-        const res = await api.post<T>(`/${endpoint}`, item)
+        const res = await userService.create(item)
 
-        setData((prev) => [...prev, res.data])
+        setData((prev) => [...prev, res.data as T])
 
         return res.data
       } catch (err) {
@@ -59,9 +61,9 @@ export default function useApiData<T>(endpoint: string) {
   const updateItem = useCallback(
     async (id: number, item: T) => {
       try {
-        const res = await api.put<T>(`/${endpoint}/${id}`, item)
+        const res = await userService.update(id, item)
 
-        setData((prev) => prev.map((d: any) => (d.id === id ? res.data : d)))
+        setData((prev) => prev.map((d) => (d.id === id ? (res.data as T) : d)))
 
         return res.data
       } catch (err) {
@@ -76,9 +78,9 @@ export default function useApiData<T>(endpoint: string) {
   const deleteItem = useCallback(
     async (id: number) => {
       try {
-        await api.delete(`/${endpoint}/${id}`)
+        await userService.remove(id)
 
-        setData((prev) => prev.filter((d: any) => d.id !== id))
+        setData((prev) => prev.filter((d) => d.id !== id))
       } catch (err) {
         console.error(err)
         throw err
