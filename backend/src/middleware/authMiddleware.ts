@@ -33,7 +33,7 @@ export const authMiddleware = (
 
     // Continue
     next()
-  } catch (error) {
+  } catch (_error) {
     return res.status(401).json({
       message: MESSAGES.INVALID_TOKEN_MSG,
     })

@@ -82,15 +82,14 @@ sequelize
     // SIGTERM is sent by docker stop, pm2 restart, cloud deploys.
     // SIGINT is sent by Ctrl+C in local dev.
     const shutdown = () => {
+      // server.close callback must be () => void — chain .then() so DB closes before exit
       server.close(() => {
-        sequelize.close()
-        process.exit(0)
+        void sequelize.close().then(() => process.exit(0))
       })
     }
     process.on('SIGTERM', shutdown)
     process.on('SIGINT', shutdown)
   })
-  .catch((error) => {
-    // Handle DB connection/sync errors
+  .catch((error: unknown) => {
     console.error(error)
   })

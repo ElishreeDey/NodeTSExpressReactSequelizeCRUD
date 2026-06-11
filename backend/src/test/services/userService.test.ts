@@ -33,7 +33,7 @@ const sampleUser = {
   name: 'John Doe',
   email: 'john@test.com',
   phone: '123-456-7890',
-  gender: 'male',
+  gender: 'Male' as const,
 }
 
 const service = new UserService()

@@ -38,7 +38,7 @@ export function useAuth() {
       }
     }
 
-    authenticate()
+    void authenticate()
   }, [])
 
   return {

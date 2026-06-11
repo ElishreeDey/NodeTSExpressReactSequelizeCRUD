@@ -1,1 +1,1 @@
-echo "Pre-commit hook passed"
+npx lint-staged

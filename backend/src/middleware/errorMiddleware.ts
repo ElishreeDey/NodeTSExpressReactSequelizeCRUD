@@ -13,9 +13,9 @@ import { MESSAGES } from '../constants'
 
 export const errorMiddleware = (
   error: any,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
   console.error(`[${MESSAGES.INTERNAL_SERVER_ERROR_MSG}]`, error)
 
