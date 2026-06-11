@@ -25,14 +25,14 @@ const mockTableData = [
     name: 'John Doe',
     email: 'john@test.com',
     phone: '123-456-7890',
-    gender: 'male',
+    gender: 'Male' as const,
   },
   {
     id: 2,
     name: 'Jane Doe',
     email: 'jane@test.com',
     phone: '098-765-4321',
-    gender: 'female',
+    gender: 'Female' as const,
   },
 ]
 

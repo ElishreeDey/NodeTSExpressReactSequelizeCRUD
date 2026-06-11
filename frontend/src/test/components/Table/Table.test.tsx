@@ -24,13 +24,14 @@ const mockTableData = [
     name: 'John Doe',
     email: 'john@test.com',
     phone: '9876543210',
-    gender: 'male',
+    gender: 'Male' as const,
   },
 ]
 
 // Mock component props
 const mockProps = {
   tableData: mockTableData,
+  loading: false,
   onDelete: vi.fn(),
   onEdit: vi.fn(),
   selectedRow: null,
@@ -63,7 +64,7 @@ describe('RenderTable Component', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument()
     expect(screen.getByText('john@test.com')).toBeInTheDocument()
     expect(screen.getByText('9876543210')).toBeInTheDocument()
-    expect(screen.getByText('male')).toBeInTheDocument()
+    expect(screen.getByText('Male')).toBeInTheDocument()
   })
 
   // Verify edit and delete icons render

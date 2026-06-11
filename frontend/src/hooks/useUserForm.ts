@@ -127,7 +127,7 @@ export default function useUserForm({
   }
 
   /* Handle Form Submit */
-  const handleSubmit = async (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     //console.log(CONSOLE_MSG.msgSubmitBtnClk)
