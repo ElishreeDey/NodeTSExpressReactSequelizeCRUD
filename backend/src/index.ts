@@ -57,8 +57,10 @@ app.use(morgan('dev'))
 // Rate Limiter Middleware should be added immediately after JSON parser and before routes so abusive requests are blocked early.
 app.use(apiRateLimiter)
 
-// Mount routes with /api prefix
-app.use('/api', userRoutes)
+// Mount all routes under /api/v1 — versioned prefix future-proofs the API.
+// If breaking changes are needed later, mount a new router at /api/v2 alongside
+// this one so existing clients continue working without any forced migration.
+app.use('/api/v1', userRoutes)
 
 // Error Middleware. errorMiddleware must be LAST app.use()
 app.use(errorMiddleware)
@@ -80,15 +82,14 @@ sequelize
     // SIGTERM is sent by docker stop, pm2 restart, cloud deploys.
     // SIGINT is sent by Ctrl+C in local dev.
     const shutdown = () => {
+      // server.close callback must be () => void — chain .then() so DB closes before exit
       server.close(() => {
-        sequelize.close()
-        process.exit(0)
+        void sequelize.close().then(() => process.exit(0))
       })
     }
     process.on('SIGTERM', shutdown)
     process.on('SIGINT', shutdown)
   })
-  .catch((error) => {
-    // Handle DB connection/sync errors
+  .catch((error: unknown) => {
     console.error(error)
   })

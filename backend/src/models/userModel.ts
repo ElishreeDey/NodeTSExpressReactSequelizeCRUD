@@ -23,7 +23,7 @@ class User extends Model<UserAttributes> implements UserAttributes {
   public name!: string
   public email!: string
   public phone!: string
-  public gender!: string
+  public gender!: 'Male' | 'Female' | 'Other' | null
 }
 
 // Initialize Sequelize Model User.init() Defines table columns and settings
@@ -53,7 +53,11 @@ User.init(
     },
 
     gender: {
-      type: DataTypes.STRING,
+      // Restricts values at the DB level — only 'Male', 'Female', 'Other' are accepted.
+      // allowNull: true lets the column be omitted when the user does not select a gender.
+      // NOTE: if the table already exists as VARCHAR, drop and recreate it, or run
+      // sync({ alter: true }) once to let Sequelize apply the column type change.
+      type: DataTypes.ENUM('Male', 'Female', 'Other'),
       allowNull: true,
     },
   },

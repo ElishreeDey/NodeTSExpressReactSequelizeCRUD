@@ -9,9 +9,11 @@
 
 import { renderHook, act } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import type { FormEvent } from 'react'
 
 import useUserForm from '../../hooks/useUserForm'
 import { VALIDATION_MSG, USER_MESSAGES } from '../../constants'
+import type { EntryDataBase } from '../../types'
 
 // Mock toast
 vi.mock('react-toastify', () => ({
@@ -36,17 +38,17 @@ const buildProps = (overrides = {}) => ({
   ...overrides,
 })
 
-// Helper to create a mock SubmitEvent
+// Helper to create a mock submit event
 const mockSubmitEvent = () =>
-  ({ preventDefault: vi.fn() }) as unknown as SubmitEvent
+  ({ preventDefault: vi.fn() }) as unknown as FormEvent<HTMLFormElement>
 
 // Sample edit user
-const sampleUser = {
+const sampleUser: EntryDataBase = {
   id: 1,
   name: 'John Doe',
   email: 'john@test.com',
   phone: '123-456-7890',
-  gender: 'male',
+  gender: 'Male',
 }
 
 describe('useUserForm Hook', () => {
@@ -345,8 +347,9 @@ describe('useUserForm Hook', () => {
   // Verify form resets when editUser becomes null
   it('resets form when editUser is null', () => {
     const { result, rerender } = renderHook(
-      ({ editUser }) => useUserForm(buildProps({ editUser })),
-      { initialProps: { editUser: sampleUser } }
+      ({ editUser }: { editUser: EntryDataBase | null }) =>
+        useUserForm(buildProps({ editUser })),
+      { initialProps: { editUser: sampleUser as EntryDataBase | null } }
     )
 
     expect(result.current.formData.name).toBe(sampleUser.name)
