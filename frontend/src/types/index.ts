@@ -13,7 +13,7 @@ export interface EntryDataBase {
   name: string
   email: string
   phone: string
-  gender: string
+  gender: 'Male' | 'Female' | 'Other' | null
 }
 
 //specify the msg data types

@@ -11,5 +11,6 @@ export interface UserAttributes {
   name: string
   email: string
   phone: string
-  gender: string
+  // Restricted to allowed gender values — null when not selected
+  gender: 'Male' | 'Female' | 'Other' | null
 }

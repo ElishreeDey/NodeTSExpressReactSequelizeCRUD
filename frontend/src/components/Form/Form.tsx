@@ -128,8 +128,9 @@ export default function RenderForm({
             onChange={handleChange}
             options={[
               { label: 'Select Gender', value: '' },
-              { label: 'Male', value: 'male' },
-              { label: 'Female', value: 'female' },
+              { label: 'Male', value: 'Male' },
+              { label: 'Female', value: 'Female' },
+              { label: 'Other', value: 'Other' },
             ]}
           />
         </div>

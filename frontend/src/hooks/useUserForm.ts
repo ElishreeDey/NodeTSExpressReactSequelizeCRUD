@@ -52,7 +52,7 @@ export default function useUserForm({
     name: '',
     email: '',
     phone: '',
-    gender: '',
+    gender: '' as 'Male' | 'Female' | 'Other' | '',
     mandatoryName: '*',
     mandatoryEmail: '*',
     mandatoryPhone: '*',
@@ -68,7 +68,7 @@ export default function useUserForm({
         name: editUser.name,
         email: editUser.email,
         phone: editUser.phone,
-        gender: editUser.gender,
+        gender: editUser.gender ?? '',
         mandatoryName: '*',
         mandatoryEmail: '*',
         mandatoryPhone: '*',
@@ -161,7 +161,8 @@ export default function useUserForm({
         name: formData.name,
         email: formData.email,
         phone: phoneValidation.formattedPhone,
-        gender: formData.gender,
+        // Send null when no gender is selected so the DB constraint is satisfied
+        gender: formData.gender || null,
       }
 
       /* EDIT USER */
