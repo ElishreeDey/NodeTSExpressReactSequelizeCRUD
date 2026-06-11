@@ -57,8 +57,10 @@ app.use(morgan('dev'))
 // Rate Limiter Middleware should be added immediately after JSON parser and before routes so abusive requests are blocked early.
 app.use(apiRateLimiter)
 
-// Mount routes with /api prefix
-app.use('/api', userRoutes)
+// Mount all routes under /api/v1 — versioned prefix future-proofs the API.
+// If breaking changes are needed later, mount a new router at /api/v2 alongside
+// this one so existing clients continue working without any forced migration.
+app.use('/api/v1', userRoutes)
 
 // Error Middleware. errorMiddleware must be LAST app.use()
 app.use(errorMiddleware)
