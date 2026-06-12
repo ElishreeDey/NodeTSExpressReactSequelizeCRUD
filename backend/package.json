@@ -7,7 +7,7 @@
     "format": "prettier --write .",
     "build": "tsc",
     "start": "node dist/index.js",
-    "prepare": "husky",
+    "prepare": "husky || true",
     "lint": "eslint src",
     "test": "vitest",
     "test:run": "vitest run"
